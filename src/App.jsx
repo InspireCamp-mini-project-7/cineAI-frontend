@@ -6,6 +6,7 @@ import Admin from "./pages/Admin";
 import MovieDetail from "./pages/MovieDetail";
 import Profile from "./pages/Profile";
 import Search from "./pages/Search";
+import LoginCallback from "./pages/LoginCallback";
 
 /* 라우터 설정 추가 */
 const router = createBrowserRouter([
@@ -14,8 +15,12 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/login",
+    path: "/login", 
     element: <Login />,
+  },
+  {
+    path: "/auth/kakao/callback", 
+    element: <LoginCallback />,
   },
   {
     path: "/home",
