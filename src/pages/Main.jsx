@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ChatbotSidebar from "./ChatbotSidebar";
-import "./Home.css";
+import "./Main.css";
 
 const API_KEY = "5733CS321TJ154JO0103";
 const BASE_URL = "/api/openapi-data2/wisenut/search_api/search_json2.jsp";
 const PLACEHOLDER_IMAGE = "https://via.placeholder.com/200x300?text=No+Image";
-const LOGO_IMAGE = "./src/assets/cineaiLogo.png";
+const LOGO_IMAGE = "../Logo image.png";
 
-const Home = () => {
+const Main = () => {
   const [movies, setMovies] = useState([]);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
@@ -142,4 +142,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Main;
