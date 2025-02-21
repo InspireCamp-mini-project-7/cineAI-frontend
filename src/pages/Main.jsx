@@ -6,6 +6,7 @@ import "./Main.css";
 
 const Main = () => {
   const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ const Main = () => {
 
   const fetchMovies = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(BASE_URL, {
         params: {
           collection: "kmdb_new2",
@@ -31,7 +33,10 @@ const Main = () => {
       console.log("전체 영화 수:", results.length);
     } catch (error) {
       console.error("영화 정보를 불러오는 데 실패했습니다:", error);
+    } finally {
+      setLoading(false);
     }
+
   };
 
   const getPosterUrl = (posters) => {
@@ -80,6 +85,15 @@ const Main = () => {
       )
       .slice(0, count);
   };
+
+  if (loading) {
+    return (
+      <div className="loading-spinner">
+        <div className="spinner"></div>
+        <p>영화 정보를 불러오는 중...</p>
+      </div>
+    );
+  }
 
   const randomMovies = getRandomMovies(movies, 4);
   const upcomingMovies = getUpcomingMovies(movies, 4);

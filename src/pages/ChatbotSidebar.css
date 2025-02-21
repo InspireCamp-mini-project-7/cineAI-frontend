@@ -4,7 +4,7 @@
     left: 0; /* left 속성 제거 */
     width: 380px;
     height: 100vh;
-    background-color: #fff;
+    background-color: #d6eaf5;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
     display: flex;
@@ -107,7 +107,7 @@
   
   .send-button {
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #0086CD;
     color: white;
     border: none;
     border-radius: 20px;
