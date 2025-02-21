@@ -96,10 +96,8 @@ const Main = () => {
   const upcomingMovies = getUpcomingMovies(movies, 4);
 
   return (
-    <div className={`main-container ${isSidebarOpen ? 'sidebar-open' : ''}`}>
+    <div className="main-container">
       <h1 className="main-title">맞춤 영화 추천</h1>
-
-      <ChatbotSidebar isOpen={isSidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       <div className="movies-section">
         <h2>랜덤 영화 추천</h2>
