@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header"; // 헤더 추가
 import Main from "./pages/Main";
+import MovieDetail from './pages/MovieDetail';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
       <div style={{ paddingTop: "60px" }}> {/* 헤더 높이만큼 여백 추가 */}
       <Routes>
         <Route path="/" element={<Main />} />
+        <Route path="/movie/:id" element={<MovieDetail />} />
       </Routes>
       </div>
     </Router>
