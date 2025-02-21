@@ -15,6 +15,8 @@ const LoginCallback = () => {
 
     /* 서버에 코드 전송 -> 토큰 받기 */
     const getToken = async (code) => {
+        console.log("코드 : ", code);
+
         try {
             // API에 코드 전달 및 토큰 추출
             const serverResponse = await axios.post("http://localhost:8080/auth/social-login", { code });
@@ -24,6 +26,7 @@ const LoginCallback = () => {
             
             // localStorage에 accessToken 저장 => 추후 변경
             localStorage.setItem("accessToken", accessToken);
+            console.log("토큰 : ", accessToken);
 
             // 로그인 성공 후, 홈 페이지로 이동
             navigate("/home");
