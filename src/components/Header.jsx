@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { FaComments, FaUserCircle, FaSearch, FaSignOutAlt } from "react-icons/fa";
+import {
+  FaComments,
+  FaUserCircle,
+  FaSearch,
+  FaSignOutAlt,
+} from "react-icons/fa";
 import ChatbotSidebar from "../pages/ChatbotSidebar";
 import "./Header.css";
 
@@ -23,11 +28,14 @@ const Header = () => {
 
         {/* 중앙: 로고 + 검색창 + 프로필 아이콘 */}
         <div className="center-content">
-          <Link to="/" className="logo">
-            <img src={LOGO_IMAGE} alt="CineAI Logo" className="logo-image" />
+          <Link to="/home" className="logo">
+            <img src={'./src/assets/cineaiLogo.png'} alt="CineAI Logo" className="logo-image" />
           </Link>
           <div className="search-bar">
-            <input type="text" placeholder="배우, 영화 제목, 키워드를 입력하세요" />
+            <input
+              type="text"
+              placeholder="배우, 영화 제목, 키워드를 입력하세요"
+            />
             <FaSearch className="search-icon" />
           </div>
           <button className="profile-btn" onClick={toggleProfile}>
@@ -52,8 +60,11 @@ const Header = () => {
         </div>
       </header>
 
-      {/* 챗봇 사이드바 */}
-      <ChatbotSidebar isOpen={isChatbotOpen} onClose={toggleChatbot} />
+      {/* Header에서만 사이드바 렌더링 */}
+      <ChatbotSidebar
+        isOpen={isChatbotOpen}
+        onClose={() => setIsChatbotOpen(false)}
+      />
     </>
   );
 };
