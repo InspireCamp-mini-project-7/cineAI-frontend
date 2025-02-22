@@ -12,13 +12,13 @@
     width: 100%;
   }
   
-  .main-content {
+  .detail-main-content {
     display: flex;
     gap: 2rem;
     margin-bottom: 2rem;
   }
   
-  .poster-section {
+  .detail-poster-section {
     flex: 0 0 auto;
     width: 300px;
   }
@@ -30,30 +30,30 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
-  .info-section {
+  .detail-info-section {
     flex: 1;
     min-width: 0;
   }
   
-  .title-row {
+  .detail-title-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1.5rem;
   }
   
-  .movie-title {
+  .detail-movie-title {
     font-size: 2rem;
     margin: 0;
     padding-right: 1rem;
   }
   
-  .movie-title span {
+  .detail-movie-title span {
     font-size: 1.5rem;
     color: #666;
   }
   
-  .button-group {
+  .detail-button-group {
     display: flex;
     gap: 0.5rem;
   }
