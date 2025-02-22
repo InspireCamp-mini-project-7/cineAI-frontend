@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_KEY, BASE_URL, PLACEHOLDER_IMAGE, LOGO_IMAGE } from "../constants";
 import axios from "axios";
-import "./Main.css";
+import "./Home.css";
 
 const Main = () => {
   const [movies, setMovies] = useState([]);
