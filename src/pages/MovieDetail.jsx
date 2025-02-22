@@ -122,7 +122,7 @@ const MovieDetail = () => {
       <div className="error-message">
         <h2>⚠️ 오류 발생</h2>
         <p>{error}</p>
-        <Link to="/" className="home-link">
+        <Link to="/home" className="home-link">
           홈으로 돌아가기
         </Link>
       </div>
@@ -132,8 +132,8 @@ const MovieDetail = () => {
   return (
     <div className="movie-detail-container">
       <div className="detail-content">
-        <div className="main-content">
-          <div className="poster-section">
+        <div className="detail-main-content">
+          <div className="detail-poster-section">
             <img
               src={movie.posters}
               alt={movie.title}
@@ -144,15 +144,15 @@ const MovieDetail = () => {
             />
           </div>
 
-          <div className="info-section">
-            <div className="title-row">
-              <h1 className="movie-title">
+          <div className="detail-info-section">
+            <div className="detail-title-row">
+              <h1 className="detail-movie-title">
                 {movie.title}
                 {movie.repRlsDate && (
                   <span> ({movie.repRlsDate.slice(0, 4)})</span>
                 )}
               </h1>
-              <div className="button-group">
+              <div className="detail-button-group">
                 <button className="download-btn" onClick={handleDownload}>
                   📥
                 </button>

@@ -59,6 +59,13 @@
     font-size: 1.2rem; /* ✅ 검색창 입력 크기 증가 */
 }
 
+/* 검색 버튼 hover 시 커서 번경 */
+.search-icon {
+    cursor: pointer;
+    width: 17px;
+    height: 17px;
+}
+
 /* 오른쪽 프로필 아이콘 스타일 */
 .header-icons {
     display: flex;
