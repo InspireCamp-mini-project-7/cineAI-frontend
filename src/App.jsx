@@ -9,9 +9,11 @@ import LoginCallback from "./pages/LoginCallback";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Header from "./components/Header"; // 헤더 추가
+import Home from "./pages/Home";
+import MovieDetail from './pages/MovieDetail';
 
 /* 헤더 숨길 경로 목록 */
-const hiddenHeaderPaths = ["/", "/login", "/auth/kakao/callback"];
+const hiddenHeaderPaths = ["/", "/login", "/auth/kakao/callback", "/Profile", "/Admin"];
 
 /* 라우터 설정 추가 */
 function Layout() {
