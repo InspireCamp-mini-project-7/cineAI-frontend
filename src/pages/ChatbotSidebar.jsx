@@ -73,7 +73,7 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="메시지를 입력하세요!"
+          placeholder="챗봇과 대화를 시작하세요"
           className="message-input"
         />
         <button type="submit" className="send-button">전송</button>
