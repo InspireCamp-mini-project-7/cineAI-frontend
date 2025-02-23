@@ -152,16 +152,34 @@ const Profile = () => {
             confirmButtonColor: "#d33",
             cancelButtonColor: "#3085d6",
             confirmButtonText: "네, 삭제할래요",
-            cancㅅㅅelButtonText: "취소"
+            cancelButtonText: "취소"
         });
 
         if(result.isConfirmed) {
-            // try {
-            //     await axios.
-            // }
-            // catch (error) {
-            //     console.error("찜한 영화 목록 삭제 실패 : ", error);
-            // }
+            try {
+                // 여러 영화 ID를 각각 PATCH 호출
+                await Promise.all(
+                    likeList.map(movie => {
+                        console.log("movie ID : ", movie.movieId);
+                        axios.patch(`http://localhost:8080/movies/liked?movieId=${movie.movieId}`)
+                })
+                );
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '영화 목록 삭제 완료 !',
+                    text: '찜한 영화 목록이 성공적으로 삭제되었습니다.'
+                });
+
+                // 찜한 영화 목록 상태 초기화
+                setLikeList([]);
+
+                // 화면 변경되도록 active tab 변경
+                setActiveTab('preference');
+            }
+            catch (error) {
+                console.error("찜한 영화 목록 삭제 실패 : ", error);
+            }
         }
     }
 
