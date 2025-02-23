@@ -20,8 +20,7 @@ const LoginCallback = () => {
         try {
             // API에 코드 전달 및 토큰 추출
             const serverResponse = await axios.post("http://localhost:8080/auth/social-login", 
-                { code } , 
-                { withCredentials: true });
+                { code });
 
             console.log("서버 : ", serverResponse);
 
@@ -33,10 +32,10 @@ const LoginCallback = () => {
             console.log("토큰 : ", accessToken);
 
             // 로그인 성공 후, 홈 페이지로 이동
-            // navigate("/home");
-            setTimeout(() => {
-                navigate("/profile");
-            }, 100);    // navigate 실행 전에 상태 저장 시간 확보
+            navigate("/home");
+            // setTimeout(() => {
+            //     navigate("/home");
+            // }, 100);    // navigate 실행 전에 상태 저장 시간 확보
         }
         catch (error) {
             console.error("카카오 로그인 실패 : ", error);
