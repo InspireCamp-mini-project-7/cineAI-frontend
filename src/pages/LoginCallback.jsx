@@ -28,7 +28,7 @@ const LoginCallback = () => {
             // accessToken, refreshToken 추출
             const { accessToken, refreshToken } = serverResponse.data.data;
             
-            // localStorage에 accessToken 저장 => 추후 변경
+            // sessionStorage에 accessToken 저장 => 추후 변경
             sessionStorage.setItem("accessToken", accessToken);
             console.log("토큰 : ", accessToken);
 
