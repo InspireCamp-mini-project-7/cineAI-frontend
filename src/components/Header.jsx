@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaComments,
   FaUserCircle,
@@ -13,10 +13,21 @@ const LOGO_IMAGE = "../Logo image.png";
 
 const Header = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const toggleChatbot = () => setIsChatbotOpen(!isChatbotOpen);
-  const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${searchQuery}`);
+    }
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
 
   return (
     <>
@@ -31,24 +42,20 @@ const Header = () => {
           <Link to="/" className="logo">
             <img src={LOGO_IMAGE} alt="CineAI Logo" className="logo-image" />
           </Link>
-          <div className="search-bar">
+          <form className="search-bar" onSubmit={handleSearchSubmit}>
             <input
               type="text"
-              placeholder="배우, 영화 제목, 키워드를 입력하세요"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="배우, 영화 제목, 감독을 입력하세요"
             />
-            <FaSearch className="search-icon" />
-          </div>
-          <button className="profile-btn" onClick={toggleProfile}>
+            <button type="submit" className="search-icon">
+              <FaSearch />
+            </button>
+          </form>
+          <button className="profile-btn" onClick={handleProfileClick}>
             <FaUserCircle className="profile-icon" />
           </button>
-          {isProfileOpen && (
-            <div className="profile-dropdown">
-              <button className="dropdown-item">
-                <FaSignOutAlt />
-                <span>로그아웃</span>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* 오른쪽: 로그아웃 버튼 */}

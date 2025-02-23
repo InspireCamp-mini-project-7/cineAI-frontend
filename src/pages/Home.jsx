@@ -99,8 +99,8 @@ const Home = () => {
     );
   }
 
-  const randomMovies = getRandomMovies(movies, 4);
-  const upcomingMovies = getUpcomingMovies(movies, 4);
+  const randomMovies = getRandomMovies(movies, 5);
+  const upcomingMovies = getUpcomingMovies(movies, 5);
 
   return (
     <div className="main-container">
@@ -129,7 +129,7 @@ const Home = () => {
       </div>
 
       <div className="movies-section">
-        <h2>개봉 예정 영화</h2>
+        <h2>최신 영화</h2>
         <div className="movies-grid">
           {upcomingMovies.map((movie) => (
             <div key={movie.movieSeq} className="movie-card">
@@ -142,14 +142,8 @@ const Home = () => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-<<<<<<< HEAD
                 <h2 className="movie-title">{movie.title || "제목 없음"}</h2>
               </Link>
-=======
-                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
-              </Link>
-              <div className="movie-title">{movie.title || "제목 없음"}</div>
->>>>>>> a58c092 (chore: 홈 페이지 스타일 변경 및 상세 페이지와의 className 충돌 해결)
             </div>
           ))}
         </div>
