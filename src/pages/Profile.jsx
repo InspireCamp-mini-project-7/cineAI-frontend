@@ -31,6 +31,16 @@ const Profile = () => {
     const token = sessionStorage.getItem("accessToken");
     console.log("profile token : ", token);
 
+    // activeTab 변경될 때만 useEffect 호출
+    useEffect(() => {
+        // 현재 탭이 account인 경우, 사용자 정보 불러옴
+        if(activeTab === 'account')
+            getUserInfo();
+        // 현재 탭이 preference인 경우, 사용자 찜 목록 불러옴
+        else if(activeTab === 'preference')
+            getLikeList();
+    }, [activeTab])
+
     // 닉네임 수정 버튼 클릭 시 실행 함수
     const updateNickname = async () => {
         if(!nickname.trim()) {
@@ -44,7 +54,8 @@ const Profile = () => {
             
         // nickname 값이 null이 아니면 수정 요청
         try { 
-            const serverResponse = await axios.patch("http://localhost:8080/members/me/edit", { nickname });
+            const serverResponse = await axios.patch("http://localhost:8080/members/me/edit", 
+                { nickname });
     
             // 닉네임 변경 요청 성공 시
             if(serverResponse.status === 200) {
@@ -57,13 +68,14 @@ const Profile = () => {
                 setclickNickname(false);
                 // 닉네임 변경 후, 다시 사용자 정보 불러옴
                 getUserInfo();
+                // 입력창 리셋
+                setNickname("");
             }
         }
         catch (error) {
             console.error("닉네임 변경 실패 : ", error);
         }  
     }
- 
 
     // 사용자 정보 요청 함수
     const getUserInfo = async () => {
@@ -71,7 +83,7 @@ const Profile = () => {
             const serverResponse = await axios.get("http://localhost:8080/members/me", {
                 headers: {
                     Authorization: `Bearer ${token}`
-                }, withCredentials: true
+                }
             });
 
             if(serverResponse.data.success)
@@ -113,10 +125,10 @@ const Profile = () => {
 
         if(result.isConfirmed) {
             try {
-                await axios.delete("http://localhost:8080/members/withdrawl", {
+                await axios.delete("http://localhost:8080/members/withdrawal", {
                     headers: {
-                        Authorization: `Bearer ${token}`
-                    }, withCredentials: true 
+                       Authorization: `Bearer ${token}`
+                    }
                 });
     
                 // 회원 탈퇴 시, 로컬 스토리지에서 토큰 삭제 후 로그인 페이지로 이동
@@ -128,17 +140,6 @@ const Profile = () => {
             } 
         }
     }
-
-    // activeTab 변경될 때만 useEffect 호출
-    useEffect(() => {
-        // 현재 탭이 account인 경우, 사용자 정보 불러옴
-        if(activeTab === 'account')
-            getUserInfo();
-        // 현재 탭이 preference인 경우, 사용자 찜 목록 불러옴
-        else if(activeTab === 'preference')
-            getLikeList();
-    }, [activeTab])
-
 
     return (
         <section className='profile-container'>
@@ -166,24 +167,6 @@ const Profile = () => {
                     {activeTab === 'account' && (
                         <>
                             <h2>계정 정보</h2>
-                            <div className='profile-account'>
-                                    <div><strong>닉네임</strong></div>
-                                    <div>홍길동</div>
-                                    <img className='profile-editIcon' src='./src/assets/editIcon.png'
-                                         onClick={handleNicknameClick}/><br />
-                                        {clickNickname ? (
-                                            <>
-                                                <div><strong>닉네임 변경</strong></div>
-                                                <input className='profile-editNickname' type='text' value={nickname} onChange={e => setNickname(e.target.value)}/>
-                                                <button className='profile-editButton' onClick={updateNickname}>수정</button><br /> 
-                                            </>    
-                                            ) : (<></>)
-                                        }
-                                    
-                                    <div><strong>이메일</strong></div> 
-                                    <div>hong@test.com</div><br/>
-                                    <button className='profile-deleteButton' onClick={deleteUser}>회원 탈퇴</button>
-                            </div>
                             {userInfo && (
                                 <div className='profile-account'>
                                     <div><strong>닉네임</strong></div>
@@ -200,7 +183,7 @@ const Profile = () => {
                                         }
                                     <div><strong>이메일</strong></div> 
                                     <div>{userInfo.email}</div>
-                                    <button className='profile-deleteButton'>회원 탈퇴</button>
+                                    <button className='profile-deleteButton' onClick={deleteUser}>회원 탈퇴</button>
                                 </div>
                             )}
                         </>
