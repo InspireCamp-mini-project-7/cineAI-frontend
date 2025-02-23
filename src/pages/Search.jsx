@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import "./Search.css";
 import { API_KEY, BASE_URL, PLACEHOLDER_IMAGE, LOGO_IMAGE } from "../constants";
@@ -116,25 +116,27 @@ const Search = () => {
 
   return (
     <div className="search-container">
-      {loading && <div className="loading-spinner">로딩 중...</div>}
-      {error && <div className="error-message">{error}</div>}
+      {loading && <div className="search-loading-spinner">로딩 중...</div>}
+      {error && <div className="search-error-message">{error}</div>}
       {!loading && !error && (
-        <div className="movies-grid">
+        <div className="search-movies-grid">
           {movies.map((movie) => (
-            <div key={movie.movieSeq} className="movie-card">
-              <img
-                src={getPosterUrl(movie.posters)}
-                alt={movie.title}
-                className="movie-poster"
-              />
-              <div className="movie-info">
+            <div key={movie.movieSeq} className="search-movie-card">
+              <Link to={`/movie/${movie.movieSeq}`}>
+                <img
+                  src={getPosterUrl(movie.posters)}
+                  alt={movie.title}
+                  className="search-movie-poster"
+                />
+              </Link>
+              <div className="search-movie-info">
                 <h3
-                  className="movie-title"
+                  className="search-movie-title"
                   dangerouslySetInnerHTML={{
                     __html: highlightText(movie.title),
                   }}
                 />
-                <p className="movie-director">
+                <p className="search-movie-director">
                   감독:{" "}
                   <span
                     dangerouslySetInnerHTML={{
@@ -145,8 +147,8 @@ const Search = () => {
                     }}
                   />
                 </p>
-                <p className="movie-year">개봉 연도: {movie.prodYear}</p>
-                <p className="movie-genre">장르: {movie.genre}</p>
+                <p className="search-movie-year">개봉 연도: {movie.prodYear}</p>
+                <p className="search-movie-genre">장르: {movie.genre}</p>
               </div>
             </div>
           ))}
