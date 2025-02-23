@@ -97,8 +97,9 @@ const Profile = () => {
     // 찜한 영화 목록 요청 함수
     const getLikeList = async () => {
         try {
-            const serverResponse = await axios.get("http://localhost:8080/members/list");
-            setLikeList(serverResponse.data);
+            // 찜한 영화 요청 시 불러올 영화 수 25개로 한정
+            const serverResponse = await axios.get("http://localhost:8080/members/list?size=25");
+            setLikeList(serverResponse.data.data.content);
         }
         catch (error) {
             console.error("찜한 영화 목록 로딩 실패 : ", error);
@@ -141,6 +142,47 @@ const Profile = () => {
         }
     }
 
+    // 찜한 영화 목록 전체 삭제 버튼 클릭 시 실행 함수
+    const handleDeleteMovieList = async () => {
+        const result = await Swal.fire({
+            title: "영화 찜 목록을 삭제하시겠습니까?",
+            text: "삭제 후 복구가 불가능합니다.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "네, 삭제할래요",
+            cancelButtonText: "취소"
+        });
+
+        if(result.isConfirmed) {
+            try {
+                // 여러 영화 ID를 각각 PATCH 호출
+                await Promise.all(
+                    likeList.map(movie => {
+                        console.log("movie ID : ", movie.movieId);
+                        axios.patch(`http://localhost:8080/movies/liked?movieId=${movie.movieId}`)
+                })
+                );
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '영화 목록 삭제 완료 !',
+                    text: '찜한 영화 목록이 성공적으로 삭제되었습니다.'
+                });
+
+                // 찜한 영화 목록 상태 초기화
+                setLikeList([]);
+
+                // 화면 변경되도록 active tab 변경
+                setActiveTab('preference');
+            }
+            catch (error) {
+                console.error("찜한 영화 목록 삭제 실패 : ", error);
+            }
+        }
+    }
+
     return (
         <section className='profile-container'>
             <header className='profile-header'>
@@ -166,7 +208,7 @@ const Profile = () => {
                 <section className='profile-content'>
                     {activeTab === 'account' && (
                         <>
-                            <h2>계정 정보</h2>
+                            <h2 className='account-h2'>계정 정보</h2>
                             {userInfo && (
                                 <div className='profile-account'>
                                     <div><strong>닉네임</strong></div>
@@ -191,18 +233,19 @@ const Profile = () => {
 
                     {activeTab === 'preference' && (
                         <div className='profile-preference'>
-                            <h2>찜한 영화 목록</h2>
+                            <h2 className='preference-h2'>찜한 영화 목록</h2>
                             <ul>
                                 {likeList.length > 0 ? (
-                                        likeList.map((movie, index) => (
+                                        likeList.map((movie, index) =>  
                                             <li key={index}> {movie.title} </li>
-                                        ))
+                                        )
                                     ) 
                                     : (
                                         <p>찜한 영화가 존재하지 않습니다.</p>
                                     )
                                 }
                             </ul>
+                            <button className='profile-preference-deleteButton' onClick={handleDeleteMovieList}>전체 삭제</button>
                         </div>    
                     )}
                 </section>
