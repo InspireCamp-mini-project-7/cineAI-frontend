@@ -8,7 +8,6 @@ const Login = () => {
     const handleKakaoLogin = () => {
         window.location.href = kakaoAuthUrl;
     };
-
     
     return (
         <section className='login-container'>
