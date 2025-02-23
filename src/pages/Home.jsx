@@ -4,11 +4,7 @@ import { API_KEY, BASE_URL, PLACEHOLDER_IMAGE, LOGO_IMAGE } from "../constants";
 import axios from "axios";
 import "./Home.css";
 
-<<<<<<< HEAD
-const Main = () => {
-=======
 const Home = () => {
->>>>>>> a58c092 (chore: 홈 페이지 스타일 변경 및 상세 페이지와의 className 충돌 해결)
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -142,8 +138,9 @@ const Home = () => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-                <h2 className="movie-title">{movie.title || "제목 없음"}</h2>
+                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
               </Link>
+              <div className="movie-title">{movie.title || "제목 없음"}</div>
             </div>
           ))}
         </div>
@@ -152,4 +149,4 @@ const Home = () => {
   );
 };
 
-export default Main;
+export default Home;
