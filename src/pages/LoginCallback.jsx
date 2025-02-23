@@ -22,20 +22,20 @@ const LoginCallback = () => {
             const serverResponse = await axios.post("http://localhost:8080/auth/social-login", 
                 { code });
 
-            console.log("서버 : ", serverResponse);
-
-            // accessToken, refreshToken 추출
-            const { accessToken, refreshToken } = serverResponse.data.data;
+            // accessToken 추출
+            const { accessToken } = serverResponse.data.data;
             
             // sessionStorage에 accessToken 저장 => 추후 변경
             sessionStorage.setItem("accessToken", accessToken);
-            console.log("토큰 : ", accessToken);
+            console.log("login : ", serverResponse.data.data.loginStatus);
 
-            // 로그인 성공 후, 홈 페이지로 이동
-            navigate("/home");
-            // setTimeout(() => {
-            //     navigate("/home");
-            // }, 100);    // navigate 실행 전에 상태 저장 시간 확보
+            // 로그인 성공 후
+            // 첫 로그인이 아니면 홈 페이지로 이동
+            if(serverResponse.data.data.loginStatus === "NOTFIRST")
+                navigate("/home");
+            // 첫 로그인이면 선호 영화 조사 페이지로 이동
+            else if(serverResponse.data.data.loginStatus === "FIRST")
+                navigate("/preference");
         }
         catch (error) {
             console.error("카카오 로그인 실패 : ", error);
