@@ -10,13 +10,8 @@ const LoginCallback = () => {
 
     const navigate = useNavigate();
 
-    // const rest_api_host = import.meta.env.VITE_REST_API_HOST;
-	// const rest_api_port = import.meta.env.VITE_REST_API_PORT;
-
     /* 서버에 코드 전송 -> 토큰 받기 */
     const getToken = async (code) => {
-        console.log("코드 : ", code);
-
         try {
             // API에 코드 전달 및 토큰 추출
             const serverResponse = await axios.post("http://localhost:8080/auth/social-login", 
@@ -27,7 +22,6 @@ const LoginCallback = () => {
             
             // sessionStorage에 accessToken 저장 => 추후 변경
             sessionStorage.setItem("accessToken", accessToken);
-            console.log("login : ", serverResponse.data.data.loginStatus);
 
             // 로그인 성공 후
             // 첫 로그인이 아니면 홈 페이지로 이동

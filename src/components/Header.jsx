@@ -25,18 +25,14 @@ const Header = () => {
     }
   };
 
-  const handleProfileClick = () => {
-    navigate('/profile');
-  };
-
   // Bearer Token 가져오기
   const token = sessionStorage.getItem("accessToken");
   console.log("token : ", token);
 
-
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
   
   // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동동
-  const moveToProfile = () => {
+  const handleProfileClick = () => {
     navigate('/profile');
   }
 
@@ -90,7 +86,7 @@ const Header = () => {
         {/* 중앙: 로고 + 검색창 + 프로필 아이콘 */}
         <div className="center-content">
           <Link to="/home" className="logo">
-            <img src={'./src/assets/cineaiLogo.png'} alt="CineAI Logo" className="logo-image" />
+            <img src={`${imagePath}/cineaiLogo.png`} alt="CineAI Logo" className="logo-image" />
           </Link>
           <form className="search-bar" onSubmit={handleSearchSubmit}>
             <input
@@ -101,7 +97,7 @@ const Header = () => {
             />
             <FaSearch className="search-icon" />
           </form>
-          <button className="profile-btn" onClick={moveToProfile}>
+          <button className="profile-btn" onClick={handleProfileClick}>
             <FaUserCircle className="profile-icon" />
           </button>
         </div>
