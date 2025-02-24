@@ -11,13 +11,14 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import Header from "./components/Header"; // 헤더 추가
 import Preference from './pages/Preference';
 import axios from 'axios';
+import NewMovie from './pages/NewMovie';
 
 // 모든 axios 요청에 대해 withCredentials: true를 전역적으로 설정
 // axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
 
 /* 헤더 숨길 경로 목록 */
-const hiddenHeaderPaths = ["/", "/login", "/auth/kakao/callback", "/profile", "/admin", "/preference"];
+const hiddenHeaderPaths = ["/", "/login", "/auth/kakao/callback", "/profile", "/admin", "/preference", "/admin/newMovie"];
 
 /* 라우터 설정 추가 */
 function Layout() {
@@ -39,6 +40,7 @@ function Layout() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/search" element={<Search />} />
           <Route path="/preference" element={<Preference />} />
+          <Route path='/admin/newMovie' element={<NewMovie />} />
         </Routes>
       </div>
     </>
