@@ -5,6 +5,8 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!inputMessage.trim()) return;
@@ -48,7 +50,7 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
   return (
     <div className={`chatbot-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="chatbot-header">
-        <img className='chatbot-logo' src="../src/assets/cineaiIcon.png"/>
+        <img className='chatbot-logo' src={`${imagePath}/cineaiIcon.png`}/>
         <div className='chatbot-text'>CineAI Chatbot</div>
         <button className="close-button" onClick={onClose}>×</button>
       </div>

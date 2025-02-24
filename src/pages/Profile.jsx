@@ -29,6 +29,8 @@ const Profile = () => {
 
     // Bearer Token 가져오기
     const token = sessionStorage.getItem("accessToken");
+    
+    const imagePath = import.meta.env.VITE_IMAGE_PATH;
 
     // activeTab 변경될 때만 useEffect 호출
     useEffect(() => {
@@ -184,7 +186,7 @@ const Profile = () => {
     return (
         <section className='profile-container'>
             <header className='profile-header'>
-                <img className='profile-homeIcon' src='./src/assets/homeIcon.png' onClick={moveToHome}></img>
+                <img className='profile-homeIcon' src={`${imagePath}/homeIcon.png`} onClick={moveToHome}></img>
                 <div className='profile-headerText'>회원 정보 관리</div>
             </header>
             <main className='profile-main'>
@@ -192,12 +194,12 @@ const Profile = () => {
                     <ul>
                         <li className={activeTab === 'account' ? 'active' : ''}
                             onClick={() => handleTabChange('account')}>
-                            <img src='./src/assets/keyIcon.png'/>
+                            <img src={`${imagePath}/keyIcon.png`}/>
                             <div>계정 정보</div>
                         </li>
                         <li className={activeTab === 'preference' ? 'active' : ''}
                             onClick={() => handleTabChange('preference')}>
-                            <img src='./src/assets/heartIcon.png'/>
+                            <img src={`${imagePath}/heartIcon.png`} />
                             <div>영화 찜 목록</div>
                         </li>
                     </ul>
@@ -211,7 +213,7 @@ const Profile = () => {
                                 <div className='profile-account'>
                                     <div><strong>닉네임</strong></div>
                                     <div>{userInfo.nickName}</div>
-                                    <img className='profile-editIcon' src='./src/assets/editIcon.png'
+                                    <img className='profile-editIcon' src={`${imagePath}/editIcon.png`}
                                          onClick={() => handleNicknameClick(!clickNickname)}/><br />
                                         {clickNickname ? (
                                             <>

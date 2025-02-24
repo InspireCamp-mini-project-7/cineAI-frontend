@@ -13,6 +13,8 @@ const Preference = () => {
 
     const navigate = useNavigate();
     
+    const imagePath = import.meta.env.VITE_IMAGE_PATH;
+
     // 마운트 될 때 영화 목록 추출 함수 호출
     useEffect(() => {
         getInitMovies();
@@ -83,7 +85,7 @@ const Preference = () => {
                                 <img 
                                     className='preference-movie-poster' 
                                     // src={movie.posterImageUrl}
-                                    src='./src/assets/heartIcon.png'
+                                    src={`${imagePath}/heartIcon.png`}
                                     alt={movie.title}/>
 
                                 {/* 영화 선택 시, 하트 이미지 오버레이 */}
@@ -91,7 +93,7 @@ const Preference = () => {
                                     selectedMovieIds.includes(movie.movieId) && (
                                         <img
                                             className='preference-movie-overlay'
-                                            src='./src/assets/checkIcon.png'
+                                            src={`${imagePath}/checkIcon.png`}
                                             alt='overlay image' />
                                     )
                                 }

@@ -6,13 +6,16 @@ import axios from 'axios';
 
 const Login = () => {
     /* 카카오 로그인 접속 */
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=dd30bf01e82d03f8cdae72dccd634374&redirect_uri=http://localhost:5173/auth/kakao/callback&response_type=code`;
+    // const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=dd30bf01e82d03f8cdae72dccd634374&redirect_uri=http://localhost:5173/auth/kakao/callback&response_type=code`;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=dd30bf01e82d03f8cdae72dccd634374&redirect_uri=${import.meta.env.VITE_KAKAO_CALLBACK_URL}&response_type=code`;
 
     const handleKakaoLogin = () => {
         window.location.href = kakaoAuthUrl;
     };
     
     const navigate = useNavigate();
+
+    const imagePath = import.meta.env.VITE_IMAGE_PATH;
 
     const handleAdminLogin = async () => {
         const { value: password } = await Swal.fire({
@@ -57,9 +60,9 @@ const Login = () => {
         <>
             <button className='login-admin' onClick={handleAdminLogin}>관리자</button>
             <section className='login-container'>
-                <img className='login-logo' src='../src/assets/cineaiLogo.png'/>        
+                <img className='login-logo' src={`${imagePath}/cineaiLogo.png`}/>        
                 <button className='login-button' onClick={handleKakaoLogin}>
-                    <img className='login-icon' src='../src/assets/kakaoIcon.png'/>
+                    <img className='login-icon' src={`${imagePath}/kakaoIcon.png`} />
                     <div className='login-text'>카카오 계정 로그인</div>                 
                 </button>
             </section>

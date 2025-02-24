@@ -20,6 +20,8 @@ const NewMovie = () => {
 
     const navigate = useNavigate();
 
+    const imagePath = import.meta.env.VITE_IMAGE_PATH;
+    
     // 뒤로 가기 버튼 클릭 시, 관리자 최신 영화 목록 페이지로 이동
     const handleBackButton = () => {
         navigate('/admin');
@@ -139,7 +141,7 @@ const NewMovie = () => {
      return (
         <section className='newmovie-container'>
             <header className='newmovie-header'>
-                <img className='newmovie-backButton' src='../src/assets/backIcon.png' onClick={handleBackButton} />
+                <img className='newmovie-backButton' src={`${imagePath}/backIcon.png`} onClick={handleBackButton} />
                 <div className='newmovie-headerText'>관리자 페이지</div>
                 <div className="admin-logout-container">
                   <button className="admin-logout-btn" onClick={handleLogout}>

@@ -13,6 +13,9 @@ const Admin = () => {
 
     const navigate = useNavigate();
 
+    const imagePath = import.meta.env.VITE_IMAGE_PATH;
+
+
     useEffect(() => {
       getNewMovies();
     }, [])
@@ -106,7 +109,7 @@ const Admin = () => {
                               alt={movie.title}
                               className="admin-movie-poster"
                               onError={e => {
-                                e.target.src = '../src/assets/cineaiLogo.png'; }} />
+                                e.target.src = `${imagePath}/cineaiLogo.png`; }} />
                             {/* </Link> */}
                         <div className="movie-title">{movie.title || "제목 없음"}</div>
                       </div>
