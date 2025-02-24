@@ -7,6 +7,8 @@ import "./MovieDetail.css";
 
 const MovieDetail = () => {
   const { id } = useParams();
+  const { movieId } = useParams();
+
   const [movie, setMovie] = useState({
     title: "",
     posters: LOGO_IMAGE,
@@ -30,51 +32,35 @@ const MovieDetail = () => {
     const fetchMovieDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(BASE_URL, {
-          params: {
-            collection: "kmdb_new2",
-            ServiceKey: API_KEY,
-            movieSeq: id,
-            type: "극영화",
-            detail: "Y",
-          },
-        });
+
+        const response = await axios.get(`${BASE_URL}/movies/${id}`);
 
         console.log("API 응답:", response.data);
 
-        const resultData = response.data?.Data?.[0]?.Result?.[0];
-        if (resultData) {
+        if (response.data.success) {
+          const movieData = response.data.data;
+
           setMovie({
-            title: resultData.title || "제목 없음",
-            posters: getPosterUrl(resultData.posters) || LOGO_IMAGE,
-            genre: resultData.genre?.replace(/\|/g, ", ") || "장르 정보 없음",
-            audiAcc: resultData.audiAcc || 0, //누적 관객수 고치기
-            plot: resultData.plot || "줄거리 정보가 없습니다.",
-            directors:
-              resultData.directors?.director?.[0]?.directorNm || "정보 없음",
-            actors:
-              resultData.actors?.actor
-                ?.slice(0, 5)
-                .map((a) => a.actorNm)
-                .join(", ") || "정보 없음",
-            runtime: resultData.runtime || "정보 없음",
-            rating: resultData.rating || "정보 없음",
-            repRlsDate: resultData.repRlsDate || "정보 없음",
-            nation: resultData.nation || "정보 없음",
-            company: resultData.company || "정보 없음",
+            title: movieData.title || "제목 없음",
+            posters: movieData.posterImageUrl || LOGO_IMAGE,
+            genre: movieData.genreList?.join(", ") || "장르 정보 없음",
+            plot: movieData.plot || "줄거리 정보 없음",
+            directors: movieData.directorName || "감독 정보 없음",
+            actors: movieData.castsList?.join(", ") || "출연 정보 없음",
+            nation: movieData.nation || "국가 정보 없음",
+            releaseDate: movieData.releaseDate || "개봉일 정보 없음",
           });
           setError(null);
         } else {
-          throw new Error("영화 정보를 찾을 수 없습니다");
+          throw new Error("영화 정보를 찾을 수 없습니다.");
         }
       } catch (error) {
         console.error("Error fetching movie details:", error);
-        setError(error.message);
+        setError("영화 정보를 불러오는 중 오류가 발생했습니다.");
         setMovie({
           title: "정보 불러오기 실패",
           posters: LOGO_IMAGE,
           genre: "-",
-          audiAcc: 0,
           plot: "",
         });
       } finally {
@@ -106,6 +92,20 @@ const MovieDetail = () => {
         console.error("다운로드 실패:", error);
         alert("포스터 다운로드에 실패했습니다");
       });
+  };
+
+  const handleLike = async () => {
+    try {
+      const response = await axios.patch(`${BASE_URL}/movies/liked?movieId=${id}`);
+      if (response.data.success) {
+        setIsLiked(!isLiked);
+      } else {
+        alert("영화 반응 업데이트에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error updating movie like status:", error);
+      alert("영화 반응 업데이트 중 오류가 발생했습니다.");
+    }
   };
 
   if (loading) {
@@ -147,18 +147,19 @@ const MovieDetail = () => {
           <div className="detail-info-section">
             <div className="detail-title-row">
               <h1 className="detail-movie-title">
-                {movie.title}
-                {movie.repRlsDate && (
-                  <span> ({movie.repRlsDate.slice(0, 4)})</span>
+                {movie.title}{" "}
+                {movie.releaseDate && (
+                  <span>({movie.releaseDate.slice(0, 4)})</span>
                 )}
               </h1>
+
               <div className="detail-button-group">
                 <button className="download-btn" onClick={handleDownload}>
                   📥
                 </button>
                 <button
                   className={`like-btn ${isLiked ? "liked" : ""}`}
-                  onClick={() => setIsLiked(!isLiked)}
+                  onClick={handleLike}
                 >
                   {isLiked ? "❤️" : "🤍"}
                 </button>
@@ -173,20 +174,9 @@ const MovieDetail = () => {
                 <strong>감독:</strong> {movie.directors}
               </p>
               <p>
-                <strong>출연:</strong> {movie.actors}
+                <strong>출연:</strong>{" "}
+                {movie.actors.split(", ").slice(0, 5).join(", ")}
               </p>
-              {/*<p><strong>제작국가:</strong> {movie.nation}</p>
-              <p><strong>제작사:</strong> {movie.company}</p>
-              <p><strong>상영시간:</strong> {movie.runtime}분</p>
-              <p><strong>등급:</strong> {movie.rating}</p>
-              <p><strong>개봉일:</strong> {movie.repRlsDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')}</p>
-              <p>
-                <strong>누적 관객수:</strong>{" "}
-                {movie.audiAcc
-                  ? Number(movie.audiAcc).toLocaleString()
-                  : "정보 없음"}
-                명
-              </p>*/}
             </div>
 
             <div className="plot-section">
