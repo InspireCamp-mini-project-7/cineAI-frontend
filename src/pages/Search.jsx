@@ -100,7 +100,7 @@ const Search = () => {
   };
 
   const getPosterUrl = (posters) => {
-    if (!posters) return null;
+    if (!posters) return LOGO_IMAGE;
     const firstPoster = posters.split("|")[0];
     return firstPoster.startsWith("http")
       ? firstPoster
