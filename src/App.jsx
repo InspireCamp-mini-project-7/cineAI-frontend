@@ -35,6 +35,7 @@ function Layout() {
           <Route path= "/auth/kakao/callback"  element={<LoginCallback/>} />
           <Route path="/home" element={<Home />} />
           <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/movies/:id" element={<MovieDetail />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/search" element={<Search />} />
