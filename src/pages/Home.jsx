@@ -125,8 +125,9 @@ const Home = () => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-                <div className="movie-title">{movie.title || "제목 없음"}</div>
+                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
               </Link>
+              <div className="movie-title">{movie.title || "제목 없음"}</div>
             </div>
           ))}
         </div>
@@ -146,8 +147,9 @@ const Home = () => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-                <div className="movie-title">{movie.title || "제목 없음"}</div>
+                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
               </Link>
+              <div className="movie-title">{movie.title || "제목 없음"}</div>
             </div>
           ))}
         </div>
