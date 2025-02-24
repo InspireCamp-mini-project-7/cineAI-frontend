@@ -71,32 +71,29 @@ const MovieDetail = () => {
     fetchMovieDetails();
   }, [id]);
 
-  const handleDownload = () => {
-    const posterUrl = getPosterUrl(movie.posters);
-    if (!posterUrl || posterUrl === LOGO_IMAGE) {
-      alert("다운로드 가능한 포스터가 없습니다");
-      return;
-    }
-
-    fetch(`https://cors-anywhere.herokuapp.com/${posterUrl}`)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = `${movie.title}_poster.jpg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch((error) => {
-        console.error("다운로드 실패:", error);
-        alert("포스터 다운로드에 실패했습니다");
+  const handleDownload = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/movies/${id}/poster`, {
+        responseType: 'blob',
       });
+      const blob = response.data;
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${movie.title}_poster.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("다운로드 실패:", error);
+      alert("포스터 다운로드에 실패했습니다");
+    }
   };
 
   const handleLike = async () => {
     try {
+      console.log("Like button clicked");
       const response = await axios.patch(`${BASE_URL}/movies/liked?movieId=${id}`);
+      console.log("API 응답:", response.data);
       if (response.data.success) {
         setIsLiked(!isLiked);
       } else {
