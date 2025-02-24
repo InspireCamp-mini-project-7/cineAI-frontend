@@ -9,13 +9,11 @@ const NewMovie = () => {
     // 영화 정보를 요청 데이터 구조에 맞게 상태로 관리
     const [movie, setMovie] = useState({
         title: '',
-        posterImageUrl: '',
         directorName: '',
         castList: '',      
         nation: '',
         plot: '',
         genreList: '',    
-        accAudiences: 0,  
         releaseDate: ''
     });
 
@@ -50,13 +48,11 @@ const NewMovie = () => {
         if(result.isConfirmed) {
             setMovie({ 
                 title: '',
-                posterImageUrl: '',
                 directorName: '',
                 castList: '',      
                 nation: '',
                 plot: '',
                 genreList: '', 
-                accAudiences: 0,   
                 releaseDate: ''
             })
         }
@@ -98,13 +94,11 @@ const NewMovie = () => {
             // 입력 필드 초기화
             setMovie({ 
                 title: '',
-                posterImageUrl: '',
                 directorName: '',
                 castList: '',      
                 nation: '',
                 plot: '',
                 genreList: '', 
-                accAudiences: 0,   
                 releaseDate: ''
             })
         }
