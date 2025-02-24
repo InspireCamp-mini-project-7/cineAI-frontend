@@ -13,6 +13,7 @@ import Preference from './pages/Preference';
 import axios from 'axios';
 import NewMovie from './pages/NewMovie';
 import PrivateRoute from './components/PrivateRoute';
+import AdminPrivateRoute from './components/AdminPrivateRouter';
 
 // 모든 axios 요청에 대해 withCredentials: true를 전역적으로 설정
 // axios.defaults.baseURL = 'http://localhost:8080';
@@ -36,11 +37,11 @@ function Layout() {
           <Route path= "/auth/kakao/callback"  element={<LoginCallback/>} />
           <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
           <Route path="/movie/:id" element={<PrivateRoute><MovieDetail /></PrivateRoute>} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminPrivateRoute><Admin /></AdminPrivateRoute>} />
           <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
           <Route path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
           <Route path="/preference" element={<PrivateRoute><Preference /></PrivateRoute>} />
-          <Route path='/admin/newMovie' element={<NewMovie />} />
+          <Route path='/admin/newMovie' element={<AdminPrivateRoute><NewMovie /></AdminPrivateRoute>} />
         </Routes>
       </div>
     </>
