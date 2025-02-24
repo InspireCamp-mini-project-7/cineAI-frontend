@@ -25,32 +25,20 @@
     align-items: center;
     background-color: #f8f9fa;
   }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+
+  .chatbot-logo {
+    width: 4em;
+    height: auto;
+    margin-left: 1rem;
   }
-  
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0rem 1rem;
-  }
-  
-  .user-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .user-name {
+   
+  .chatbot-text {
+    color: rgba(0, 134, 205, 0.7);
+    font-size: 1.4rem;
     font-weight: bold;
-    color: #333;
+    margin-right: 2rem;
   }
-  
+
   .close-button {
     background: none;
     border: none;

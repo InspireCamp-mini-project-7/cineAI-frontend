@@ -48,12 +48,8 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
   return (
     <div className={`chatbot-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="chatbot-header">
-        <div className="user-info">
-          <div className="user-avatar">
-            <img src="/api/placeholder/40/40" alt="User Avatar" />
-          </div>
-          <span className="user-name">User Name</span>
-        </div>
+        <img className='chatbot-logo' src="../src/assets/cineaiIcon.png"/>
+        <div className='chatbot-text'>CineAI Chatbot</div>
         <button className="close-button" onClick={onClose}>×</button>
       </div>
       
