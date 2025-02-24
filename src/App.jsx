@@ -12,6 +12,7 @@ import Header from "./components/Header"; // 헤더 추가
 import Preference from './pages/Preference';
 import axios from 'axios';
 import NewMovie from './pages/NewMovie';
+import PrivateRoute from './components/PrivateRoute';
 
 // 모든 axios 요청에 대해 withCredentials: true를 전역적으로 설정
 // axios.defaults.baseURL = 'http://localhost:8080';
@@ -28,18 +29,17 @@ function Layout() {
   return (
     <>
       { !shouldHideHeader && <Header /> } {/* 특정 경로에서 헤더 숨김 */}
-      {/* <div style={{ paddingTop: "60px" }}> 헤더 높이만큼 여백 추가 */}
       <div>
         <Routes>
           <Route path= "/"  element={<Login/>} />
           <Route path= "/login"  element={<Login/>} />
           <Route path= "/auth/kakao/callback"  element={<LoginCallback/>} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/movie/:id" element={<MovieDetail />} />
+          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/movie/:id" element={<PrivateRoute><MovieDetail /></PrivateRoute>} />
           <Route path="/admin" element={<Admin />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/preference" element={<Preference />} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
+          <Route path="/preference" element={<PrivateRoute><Preference /></PrivateRoute>} />
           <Route path='/admin/newMovie' element={<NewMovie />} />
         </Routes>
       </div>
