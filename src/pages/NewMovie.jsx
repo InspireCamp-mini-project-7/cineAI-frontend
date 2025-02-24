@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
+import { FaSignOutAlt } from 'react-icons/fa' 
 
 const NewMovie = () => {
     // 영화 정보를 요청 데이터 구조에 맞게 상태로 관리
@@ -107,11 +108,45 @@ const NewMovie = () => {
         }
     }
 
+    // 로그아웃 처리 함수
+      const handleLogout = async () => {
+        const result = await Swal.fire({
+          title: "로그아웃 하시겠습니까?",
+          text: "작성하신 내용이 모두 삭제됩니다.",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#d33",
+          cancelButtonColor: "#3085d6",
+          confirmButtonText: "로그아웃",
+          cancelButtonText: "취소"
+        });
+    
+        if(result.isConfirmed) {
+          Swal.fire({
+            icon: 'success',
+            title: '로그아웃 완료 !',
+            text: '로그아웃에 성공하여 로그인 페이지로 이동합니다.'
+          });
+    
+          // sessionStroage에서 토큰 제거
+          sessionStorage.removeItem('password');
+    
+          // 로그인 페이지로 이동
+          navigate('/');
+        }
+      }
+
      return (
         <section className='newmovie-container'>
             <header className='newmovie-header'>
                 <img className='newmovie-backButton' src='../src/assets/backIcon.png' onClick={handleBackButton} />
                 <div className='newmovie-headerText'>관리자 페이지</div>
+                <div className="admin-logout-container">
+                  <button className="admin-logout-btn" onClick={handleLogout}>
+                      <FaSignOutAlt />
+                      <span>로그아웃</span>
+                  </button>
+                </div>
             </header>
             <h2>최신 영화 추가</h2>
             <div className="newmovie-movie-info">
