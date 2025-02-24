@@ -29,7 +29,6 @@ const Profile = () => {
 
     // Bearer Token 가져오기
     const token = sessionStorage.getItem("accessToken");
-    console.log("profile token : ", token);
 
     // activeTab 변경될 때만 useEffect 호출
     useEffect(() => {
@@ -160,7 +159,6 @@ const Profile = () => {
                 // 여러 영화 ID를 각각 PATCH 호출
                 await Promise.all(
                     likeList.map(movie => {
-                        console.log("movie ID : ", movie.movieId);
                         axios.patch(`http://localhost:8080/movies/liked?movieId=${movie.movieId}`)
                 })
                 );
