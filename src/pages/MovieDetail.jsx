@@ -54,7 +54,7 @@ const MovieDetail = () => {
               resultData.directors?.director?.[0]?.directorNm || "정보 없음",
             actors:
               resultData.actors?.actor
-                ?.slice(0, 3)
+                ?.slice(0, 5)
                 .map((a) => a.actorNm)
                 .join(", ") || "정보 없음",
             runtime: resultData.runtime || "정보 없음",
@@ -179,14 +179,14 @@ const MovieDetail = () => {
               <p><strong>제작사:</strong> {movie.company}</p>
               <p><strong>상영시간:</strong> {movie.runtime}분</p>
               <p><strong>등급:</strong> {movie.rating}</p>
-              <p><strong>개봉일:</strong> {movie.repRlsDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')}</p>*/}
+              <p><strong>개봉일:</strong> {movie.repRlsDate?.replace(/(\d{4})(\d{2})(\d{2})/, '$1.$2.$3')}</p>
               <p>
                 <strong>누적 관객수:</strong>{" "}
                 {movie.audiAcc
                   ? Number(movie.audiAcc).toLocaleString()
                   : "정보 없음"}
                 명
-              </p>
+              </p>*/}
             </div>
 
             <div className="plot-section">

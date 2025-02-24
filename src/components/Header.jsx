@@ -11,18 +11,28 @@ import "./Header.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 
-const LOGO_IMAGE = "../Logo image.png";
-
 const Header = () => {
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   const toggleChatbot = () => setIsChatbotOpen(!isChatbotOpen);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${searchQuery}`);
+    }
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
 
   // Bearer Token 가져오기
   const token = sessionStorage.getItem("accessToken");
   console.log("token : ", token);
 
-  const navigate = useNavigate(); 
 
   
   // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동동
@@ -82,13 +92,15 @@ const Header = () => {
           <Link to="/home" className="logo">
             <img src={'./src/assets/cineaiLogo.png'} alt="CineAI Logo" className="logo-image" />
           </Link>
-          <div className="search-bar">
+          <form className="search-bar" onSubmit={handleSearchSubmit}>
             <input
               type="text"
-              placeholder="배우, 영화 제목, 키워드를 입력하세요"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="배우, 영화 제목, 감독을 입력하세요"
             />
             <FaSearch className="search-icon" />
-          </div>
+          </form>
           <button className="profile-btn" onClick={moveToProfile}>
             <FaUserCircle className="profile-icon" />
           </button>
