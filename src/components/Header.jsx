@@ -16,6 +16,8 @@ const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  const imagePath = import.meta.env.VITE_IMAGE_PATH;
+
   const toggleChatbot = () => setIsChatbotOpen(!isChatbotOpen);
 
   const handleSearchSubmit = (e) => {
@@ -29,12 +31,15 @@ const Header = () => {
   const token = sessionStorage.getItem("accessToken");
   console.log("token : ", token);
 
-  const imagePath = import.meta.env.VITE_IMAGE_PATH;
-  
   // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동동
   const handleProfileClick = () => {
     navigate('/profile');
   }
+
+  // 뒤로 가기 버튼 클릭 시, 이전 페이지로 이동
+  const handleBackButtonClick = () => {
+    navigate(-1);
+  }  
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {
@@ -78,6 +83,8 @@ const Header = () => {
   return (
     <>
       <header className="header">
+        <img className='header-backButton' src={`${imagePath}/blackBackIcon.png`} onClick={handleBackButtonClick} />
+
         {/* 왼쪽: 챗봇 버튼 */}
         <button className="chatbot-btn" onClick={toggleChatbot}>
           <FaComments className="chat-icon" />

@@ -18,6 +18,14 @@
     height: 100px; /* ✅ 헤더 높이 설정 */
 }
 
+.header-backButton {
+    width: 2rem;
+    height: 2rem;
+    margin-top: 2.2rem;
+    margin-left: 2rem;
+    cursor: pointer;
+}
+
 /* 챗봇 버튼 스타일 */
 .chatbot-btn {
     background: none;

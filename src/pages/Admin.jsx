@@ -26,7 +26,7 @@ const Admin = () => {
         setIsLoading(true);
 
         // 영화 전체 정보 불러오기 
-        await axios.get("http://localhost:8080/movies/upload");
+        //await axios.get("http://localhost:8080/movies/upload");
         const serverResponse =  await axios.get("http://localhost:8080/movies/new-movies?&size=30");
         setNewMovieList(serverResponse.data.data.content);
         console.log("new movie list : ", serverResponse.data.data.content);
