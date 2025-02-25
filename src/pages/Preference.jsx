@@ -52,26 +52,37 @@ const Preference = () => {
 
     // 선택 영화 목록을 서버로 전송
     const handleSubmit = async () => {
-        try {
-            // 여러 영화 ID를 각각 PATCH 호출
-            await Promise.all(
-                selectedMovieIds.map(movieId => {
-                    axios.patch(`/movies/liked?movieId=${movieId}`)
+        // 무조건 영화 선택해야 다음 화면 넘어갈 수 있도록 설정
+        if(selectedMovieIds.length > 0){
+            try {
+                // 여러 영화 ID를 각각 PATCH 호출
+                await Promise.all(
+                    selectedMovieIds.map(movieId => {
+                        axios.patch(`/movies/liked?movieId=${movieId}`)
+                    })
+                );
+    
+                Swal.fire({
+                    icon: 'success',
+                    title: '영화 선택 완료 !',
+                    text: '선택한 영화가 성공적으로 저장되었습니다.'
                 })
-            );
-
+    
+                // 영화 Id 전송 성공 시, home으로 이동
+                navigate('/home');
+            }
+            catch (error) {
+                console.error('선택한 영화 전송 실패 : ', error);
+            }
+        }
+        else {
             Swal.fire({
-                icon: 'success',
-                title: '영화 선택 완료 !',
-                text: '선택한 영화가 성공적으로 저장되었습니다.'
-            })
-
-            // 영화 Id 전송 성공 시, home으로 이동
-            navigate('/home');
-        }
-        catch (error) {
-            console.error('선택한 영화 전송 실패 : ', error);
-        }
+                icon: "warning",
+                title: "영화 선택 필수 !",
+                text: "영화를 하나 이상 선택하세요.",
+            });
+            return;
+        } 
     }
 
     return (
