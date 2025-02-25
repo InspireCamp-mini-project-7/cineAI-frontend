@@ -13,7 +13,6 @@ const MovieDetail = () => {
     title: "",
     posters: LOGO_IMAGE,
     genre: "",
-    audiAcc: 0,
     plot: "",
   });
   const [isLiked, setIsLiked] = useState(false);
@@ -35,22 +34,12 @@ const MovieDetail = () => {
     }
   }
 
-  const getPosterUrl = (posters) => {
-    if (!posters) return null;
-    const firstPoster = posters.split("|")[0];
-    return firstPoster?.startsWith("http")
-      ? firstPoster
-      : `http://${firstPoster}`;
-  };
-
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
         setLoading(true);
 
         const response = await axios.get(`${BASE_URL}/movies/${id}`);
-
-        console.log("API 응답:", response.data);
 
         if (response.data.success) {
           const movieData = response.data.data;
@@ -93,7 +82,6 @@ const MovieDetail = () => {
   
   // likeList에서 현재 영화가 존재하는지 확인하여 isLiked 업데이트
   useEffect(() => {
-    console.log(likeList);
     if (likeList.length > 0) {
       setIsLiked(likeList.some(movie => movie.movieId === parseInt(id)));
     }
@@ -119,9 +107,7 @@ const MovieDetail = () => {
 
   const handleLike = async () => {
     try {
-      console.log("Like button clicked");
       const response = await axios.patch(`${BASE_URL}/movies/liked?movieId=${id}`);
-      console.log("API 응답:", response.data);
       if (response.data.success) {
         setIsLiked(!isLiked);
       } else {
