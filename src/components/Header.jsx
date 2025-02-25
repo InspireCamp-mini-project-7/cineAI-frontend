@@ -29,9 +29,8 @@ const Header = () => {
 
   // Bearer Token 가져오기
   const token = sessionStorage.getItem("accessToken");
-  console.log("token : ", token);
 
-  // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동동
+  // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동
   const handleProfileClick = () => {
     navigate('/profile');
   }

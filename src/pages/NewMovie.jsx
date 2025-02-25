@@ -138,7 +138,7 @@ const NewMovie = () => {
             Swal.fire({
                 icon: 'error',
                 title: '저장 실패!',
-                text: '영화 정보를 저장하는 중 오류가 발생했습니다.'
+                text: '모든 값을 입력했는지 다시 확인해주세요.'
             });
         }
     };
