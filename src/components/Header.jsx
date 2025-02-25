@@ -55,7 +55,7 @@ const Header = () => {
 
     if(result.isConfirmed) {
       try {
-        axios.post("http://localhost:8080/members/logout", {
+        axios.post("/members/logout", {
           headers: {
              Authorization: `Bearer ${token}`
           }

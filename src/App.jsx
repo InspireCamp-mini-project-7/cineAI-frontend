@@ -16,7 +16,7 @@ import PrivateRoute from './components/PrivateRoute';
 import AdminPrivateRoute from './components/AdminPrivateRouter';
 
 // 모든 axios 요청에 대해 withCredentials: true를 전역적으로 설정
-// axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.withCredentials = true;
 
 /* 헤더 숨길 경로 목록 */

@@ -14,7 +14,7 @@ const LoginCallback = () => {
     const getToken = async (code) => {
         try {
             // API에 코드 전달 및 토큰 추출
-            const serverResponse = await axios.post("http://localhost:8080/auth/social-login", 
+            const serverResponse = await axios.post("/auth/social-login", 
                 { code });
 
             // accessToken 추출

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { API_KEY, BASE_URL, PLACEHOLDER_IMAGE, LOGO_IMAGE } from "../constants";
+import { LOGO_IMAGE } from "../constants";
 import "./MovieDetail.css";
 
 const MovieDetail = () => {
@@ -89,7 +89,7 @@ const MovieDetail = () => {
 
   const handleDownload = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/movies/${id}/poster`, {
+      const response = await axios.get(`/movies/${id}/poster`, {
         responseType: 'blob',
       });
       const blob = response.data;
@@ -107,7 +107,7 @@ const MovieDetail = () => {
 
   const handleLike = async () => {
     try {
-      const response = await axios.patch(`${BASE_URL}/movies/liked?movieId=${id}`);
+      const response = await axios.patch(`/movies/liked?movieId=${id}`);
       if (response.data.success) {
         setIsLiked(!isLiked);
       } else {

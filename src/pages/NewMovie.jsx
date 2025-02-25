@@ -106,7 +106,7 @@ const NewMovie = () => {
         }
 
         try {
-            await axios.post("http://localhost:8080/movies/create", formData, {
+            await axios.post("/movies/create", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

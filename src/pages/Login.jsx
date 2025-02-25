@@ -32,7 +32,7 @@ const Login = () => {
                 // sessionStorage에 관리자 비밀번호 저장
                 sessionStorage.setItem('password', password);
 
-                const serverResponse = await axios.post("http://localhost:8080/members/admin-login", { password });
+                const serverResponse = await axios.post("/members/admin-login", { password });
                 if(serverResponse.data.status === 200) {
                      // 로그인 성공 시, 관리자 페이지로 이동
                     Swal.fire({

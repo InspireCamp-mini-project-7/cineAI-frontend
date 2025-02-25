@@ -25,7 +25,7 @@ const Admin = () => {
       try {
         setIsLoading(true);
 
-        const serverResponse =  await axios.get("http://localhost:8080/movies/new-movies?&size=5");
+        const serverResponse =  await axios.get("/movies/new-movies?&size=5");
         setNewMovieList(serverResponse.data.data.content);
       }
       catch (error) {

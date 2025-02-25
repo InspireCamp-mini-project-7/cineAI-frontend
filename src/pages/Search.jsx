@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import "./Search.css";
-import { BASE_URL, LOGO_IMAGE } from "../constants";
 import Swal from "sweetalert2";
 import { FaSyncAlt } from "react-icons/fa";
 
@@ -25,7 +24,7 @@ const Search = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${BASE_URL}/movies/search`, {
+      const response = await axios.get(`/movies/search`, {
         params: {
           keyword: query,
           page: page, 

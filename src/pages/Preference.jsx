@@ -27,7 +27,7 @@ const Preference = () => {
         try {
             setIsLoading(true);
             
-            const serverResponse = await axios.get('http://localhost:8080/movies/init?size=8');
+            const serverResponse = await axios.get('/movies/init?size=8');
             setMovieList(serverResponse.data.data);
         }
         catch (error) {

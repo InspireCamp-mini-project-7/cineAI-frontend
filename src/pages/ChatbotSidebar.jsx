@@ -25,7 +25,7 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
     setInputMessage('');
 
     try {
-      const response = await axios.post('http://localhost:8080/api/movies/qa',
+      const response = await axios.post('/api/movies/qa',
         {question: inputMessage}
       );
 

@@ -51,7 +51,7 @@ const Home = () => {
 
 
       // 한 번에 5개 요청
-      const response = await axios.get("http://localhost:8080/movies/todays?size=5");
+      const response = await axios.get("/movies/todays?size=5");
       // {
       //   // params,
       //   // paramsSerializer: { indexes: null }, 
@@ -79,7 +79,7 @@ const Home = () => {
   const fetchLatestMovies = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/movies/new-movies?&size=5");
+        "/movies/new-movies?&size=5");
       //   {
       //     // params: {
       //     //   size: 5,

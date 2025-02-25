@@ -58,7 +58,7 @@ const Profile = () => {
             
         // nickname 값이 null이 아니면 수정 요청
         try { 
-            const serverResponse = await axios.patch("http://localhost:8080/members/me/edit", 
+            const serverResponse = await axios.patch("/members/me/edit", 
                 { nickname });
     
             // 닉네임 변경 요청 성공 시
@@ -84,7 +84,7 @@ const Profile = () => {
     // 사용자 정보 요청 함수
     const getUserInfo = async () => {
         try {
-            const serverResponse = await axios.get("http://localhost:8080/members/me", {
+            const serverResponse = await axios.get("/members/me", {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -104,7 +104,7 @@ const Profile = () => {
             setIsLoading(true);
 
             // 찜한 영화 요청 시 불러올 영화 수 25개로 한정
-            const serverResponse = await axios.get("http://localhost:8080/members/list?size=25");
+            const serverResponse = await axios.get("/members/list?size=25");
             setLikeList(serverResponse.data.data.content);
         }
         catch (error) {
@@ -135,7 +135,7 @@ const Profile = () => {
 
         if(result.isConfirmed) {
             try {
-                await axios.delete("http://localhost:8080/members/withdrawal", {
+                await axios.delete("/members/withdrawal", {
                     headers: {
                        Authorization: `Bearer ${token}`
                     }
