@@ -97,7 +97,7 @@ const MovieDetail = () => {
     if (likeList.length > 0) {
       setIsLiked(likeList.some(movie => movie.movieId === parseInt(id)));
     }
-  }, [likeList, id]); // likeList가 변경될 때 실행
+  }, [likeList, id]);
 
   const handleDownload = async () => {
     try {
