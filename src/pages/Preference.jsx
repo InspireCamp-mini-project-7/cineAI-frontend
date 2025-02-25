@@ -11,6 +11,8 @@ const Preference = () => {
     // 사용자가 선택한 영화 ID 배열
     const [selectedMovieIds, setSelectedMovieIds] = useState([]);
 
+    const [isLoading, setIsLoading] = useState(true);
+    
     const navigate = useNavigate();
     
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
@@ -23,12 +25,20 @@ const Preference = () => {
     // 서버로부터 영화 목록 추출
     const getInitMovies = async () => {
         try {
+            setIsLoading(true);
+
+            // 영화 전체 정보 불러오기 
+            await axios.get("http://localhost:8080/movies/upload");
+            
             const serverResponse = await axios.get('http://localhost:8080/movies/init?size=8');
             setMovieList(serverResponse.data.data);
             console.log("response : ", serverResponse.data.data);
         }
         catch (error) {
             console.error("영화 목록 로딩 실패 : ", error);
+        }
+        finally {
+            setIsLoading(false);
         }
     } 
 
@@ -50,7 +60,6 @@ const Preference = () => {
             // 여러 영화 ID를 각각 PATCH 호출
             await Promise.all(
                 selectedMovieIds.map(movieId => {
-                    console.log("movie ID : ", movieId);
                     axios.patch(`http://localhost:8080/movies/liked?movieId=${movieId}`)
                 })
             );
@@ -73,34 +82,43 @@ const Preference = () => {
         <section className='preference-container'>
             <h1 className='preference-text'>선호 영화 선택</h1>
             <div className="preference-movies-section"> 
-                <div className="preference-movies-grid">
-                    {
-                        movieList.map(movie => (
-                            <div 
-                                className='preference-movie-card' 
-                                id={`${selectedMovieIds.includes(movie.movieId) ? 'selected' : ''}`}
-                                key={movie.movieId} 
-                                onClick={() => handleSelectMovie(movie.movieId)}>
-
-                                <img 
-                                    className='preference-movie-poster' 
-                                    // src={movie.posterImageUrl}
-                                    src={`${imagePath}/heartIcon.png`}
-                                    alt={movie.title}/>
-
-                                {/* 영화 선택 시, 하트 이미지 오버레이 */}
-                                { 
-                                    selectedMovieIds.includes(movie.movieId) && (
-                                        <img
-                                            className='preference-movie-overlay'
-                                            src={`${imagePath}/checkIcon.png`}
-                                            alt='overlay image' />
-                                    )
-                                }
-                                <div className='preference-movie-title'> {movie.title} </div>
+                {
+                         isLoading && (
+                            <div className="loading-spinner">
+                                <div className="spinner"></div>
+                                <p>영화 목록을 불러오는 중...</p>
                             </div>
-                        ))
-                    }
+                        )
+                }   
+                <div className="preference-movies-grid">                     
+                    {
+                        !isLoading && (
+                            movieList.map(movie => (
+                                <div 
+                                    className='preference-movie-card' 
+                                    id={`${selectedMovieIds.includes(movie.movieId) ? 'selected' : ''}`}                                        key={movie.movieId} 
+                                    onClick={() => handleSelectMovie(movie.movieId)}>
+        
+                                    <img 
+                                        className='preference-movie-poster' 
+                                        src={movie.posterImageUrl}
+                                        alt={movie.title}/>
+        
+                                    {/* 영화 선택 시, 하트 이미지 오버레이 */}
+                                    { 
+                                        selectedMovieIds.includes(movie.movieId) && (
+                                            <img
+                                                className='preference-movie-overlay'
+                                                src={`${imagePath}/checkIcon.png`}
+                                                alt='overlay image' />
+                                        )
+                                    }
+                                    <div className='preference-movie-title'> {movie.title} </div>
+                                </div>
+                                ))
+                            )
+                        }
+                        
                 </div>
                 <button className='preference-sumbit-button' onClick={handleSubmit}>제출</button>
             </div>
