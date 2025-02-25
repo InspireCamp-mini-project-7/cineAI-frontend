@@ -59,6 +59,10 @@
     border-radius: 8px;
   }
   
+  .newmovie-movie-info span{
+    margin-left: 2rem;
+  }
+
   /* 각 입력 필드 그룹 (라벨과 입력 필드를 가로로 배치) */
   .newmovie-movie-info > div {
     display: flex;

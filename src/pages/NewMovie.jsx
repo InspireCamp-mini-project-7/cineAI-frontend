@@ -1,7 +1,7 @@
 import React from 'react'
 import './NewMovie.css'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FaSignOutAlt } from 'react-icons/fa' 
@@ -18,6 +18,10 @@ const NewMovie = () => {
         releaseDate: ''
     });
 
+    // 업로드할 이미지 파일
+    const [posterFile, setPosterFile] = useState(null);
+    const fileInputRef = useRef(null);
+        
     const navigate = useNavigate();
 
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
@@ -27,11 +31,18 @@ const NewMovie = () => {
         navigate('/admin');
     }   
 
-    // 포스터 이미지 업로드
-    const handleUpload = () => {  
+    // 포스터 업로드 버튼 클릭 시 파일 선택창 열기
+    const handleUploadButtonClick = () => {
+        fileInputRef.current?.click();
+    };
 
-        // API 완성 후 추가
-    }
+    // 파일 선택 시 상태에 파일 정보 저장
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            setPosterFile(file); // 파일 객체 자체 저장
+        }
+    };
 
     // 초기화 버튼 클릭 시
     const handleDeleteButton = async () => {
@@ -69,47 +80,62 @@ const NewMovie = () => {
 
     // 영화 추가 함수
     const handleSaveButton = async () => {
-        const requestData = {
-            ...movie,
-            directorName: movie.directorName.split(',').map(item => item.trim()),
-            castList: movie.castList.split(',').map(item => item.trim()),
-            genreList: movie.genreList.split(',').map(item => item.trim())
-        };
-
-        console.log('요청 데이터 : ', requestData);
-
+        const formData = new FormData();
+    
+        // 문자열 데이터 추가
+        formData.append('title', movie.title);
+        formData.append('nation', movie.nation);
+        formData.append('plot', movie.plot);
+        formData.append('releaseDate', movie.releaseDate);
+    
+        // JSON으로 변환하여 추가
+        formData.append('directorName', JSON.stringify(movie.directorName.split(',').map(item => item.trim())));
+        formData.append('castList', JSON.stringify(movie.castList.split(',').map(item => item.trim())));
+        formData.append('genreList', JSON.stringify(movie.genreList.split(',').map(item => item.trim())));
+    
+        // 파일 추가
+        if (posterFile) {
+            formData.append('posterImage', posterFile);
+        }
+    
+        console.log("FormData 전송 내용:");
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+        }
+    
         try {
-            await axios.post(
-                "http://localhost:8080/movies/create",
-                requestData,
-                {
-                    headers: {
-                      'Content-Type': 'application/json'
-                    }
-                });
-
+            await axios.post("http://localhost:8080/movies/create", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+    
             Swal.fire({
                 icon: 'success',
-                title: '입력한 영화 정보 저장 완료 !',
-                text: '입력한 영화 정보가 성공적으로 저장되었습니다.' 
+                title: '영화 정보 저장 완료!',
+                text: '입력한 영화 정보가 성공적으로 저장되었습니다.'
             });
-
-            // 입력 필드 초기화
-            setMovie({ 
+    
+            setMovie({
                 title: '',
                 directorName: '',
-                castList: '',      
+                castList: '',
                 nation: '',
                 plot: '',
-                genreList: '', 
+                genreList: '',
                 releaseDate: ''
-            })
+            });
+            setPosterFile(null);
+        } catch (error) {
+            console.error("영화 정보 저장 실패:", error);
+            Swal.fire({
+                icon: 'error',
+                title: '저장 실패!',
+                text: '영화 정보를 저장하는 중 오류가 발생했습니다.'
+            });
         }
-        catch (error) {
-            console.error("영화 정보 저장 실패 : ", error);
-        }
-    }
-
+    };
+    
     // 로그아웃 처리 함수
       const handleLogout = async () => {
         const result = await Swal.fire({
@@ -154,17 +180,18 @@ const NewMovie = () => {
             <div className="newmovie-movie-info">
                 <div>
                     <label>포스터 이미지 : </label>
-                    {/* <input
-                    type="text"
-                    placeholder="포스터 URL"
-                    value={movie.posterImageUrl}
-                    onChange={(e) =>
-                        setMovie({ ...movie, posterImageUrl: e.target.value })
-                    }
-                    /> */}
-                    <button className="newmovie-upload-btn" onClick={handleUpload}>
-                    📤
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleFileChange} 
+                    />
+
+                    <button className="newmovie-upload-btn" onClick={handleUploadButtonClick}>
+                    📤 파일 선택
                     </button>
+
+                    {posterFile && <span>📁 {posterFile.name}</span>}
                 </div>
 
                 <div>
