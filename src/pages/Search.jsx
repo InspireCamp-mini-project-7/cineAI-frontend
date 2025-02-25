@@ -33,12 +33,6 @@ const Search = () => {
       });
 
       const results = response.data?.data?.list || [];
-      
-      if (page === 0) {
-        setMovies(results); // 첫 페이지면 새로운 목록으로 교체
-      } else {
-        setMovies((prevMovies) => [...prevMovies, ...results]); // 페이지 추가 시 기존 목록에 더하기
-      }
 
       if(results.length === 0) {
         Swal.fire({
@@ -46,11 +40,19 @@ const Search = () => {
           title: '검색 결과 없음 !',
           text: '검색 결과가 존재하지 않습니다.'
         })
+
+        // 검색 결과가 없을 경우, lastPage 0으로 초기화
+        setLastPage(0);
+        return;
       }
 
-      if (response.data.length > 0) {
-        setLastPage(page);
+      if (page === 0) {
+        setMovies(results); // 첫 페이지면 새로운 목록으로 교체
+      } else {
+        setMovies((prevMovies) => [...prevMovies, ...results]); // 페이지 추가 시 기존 목록에 더하기
       }
+
+      setLastPage(page);
     } 
     catch (error) {
       console.error("영화 정보를 불러오는 데 실패했습니다:", error);
