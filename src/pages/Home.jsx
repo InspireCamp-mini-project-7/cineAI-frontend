@@ -1,96 +1,157 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { API_KEY, BASE_URL, PLACEHOLDER_IMAGE, LOGO_IMAGE } from "../constants";
+import { LOGO_IMAGE } from "../constants";
 import axios from "axios";
 import "./Home.css";
-import { FaSyncAlt } from "react-icons/fa"; // 아이콘 추가
+import { FaSyncAlt } from "react-icons/fa";
 
 const Home = () => {
-  const [movies, setMovies] = useState([]);
-  const [randomMovies, setRandomMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [recommendedMovies, setRecommendedMovies] = useState([]);
+  const [latestMovies, setLatestMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [lastMovieId, setLastMovieId] = useState(0); // ✨ null → 0으로 초기화
 
   useEffect(() => {
-    fetchMovies();
+    const token = sessionStorage.getItem("accessToken");
+    if (!token) {
+      alert("로그인이 필요합니다!");
+      window.location.href = "/login";
+      return;
+    }
+    initializeMovieData();
   }, []);
 
-  const fetchMovies = async () => {
+  const initializeMovieData = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(BASE_URL, {
-        params: {
-          collection: "kmdb_new2",
-          ServiceKey: API_KEY,
-          type: "극영화",
-          listCount: 500,
-          sort: "prodYear,1",
-          releaseDts: "20100101",
-          releaseDte: "20251231",
-        },
-      });
-
-      const results = response.data.Data?.[0]?.Result || [];
-      setMovies(results);
-      setRandomMovies(getRandomMovies(results, 5));
-      setUpcomingMovies(getUpcomingMovies(results, 5));
-      console.log("전체 영화 수:", results.length);
+      await syncMoviesWithBackend();
+      await Promise.all([
+        // ✨ 병렬 처리로 성능 향상
+        fetchRecommendedMovies(),
+        fetchLatestMovies(),
+      ]);
     } catch (error) {
-      console.error("영화 정보를 불러오는 데 실패했습니다:", error);
+      console.error("영화 정보 로드 실패 상세:", {
+        status: error.response?.status,
+        data: error.response?.data,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const getPosterUrl = (posters) => {
-    if (!posters) return null;
-    const firstPoster = posters.split("|")[0];
-    return firstPoster.startsWith("http")
-      ? firstPoster
-      : `http://${firstPoster}`;
+  const syncMoviesWithBackend = async () => {
+    try {
+      const token = sessionStorage.getItem("accessToken");
+      if (!token) throw new Error("토큰 없음");
+
+      // 영화 정보 업로드 API 호출
+      const response = await axios.get("http://localhost:8080/movies/upload", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      });
+
+      if (response.status === 200) {
+        console.log("영화 정보 동기화 성공");
+      }
+    } catch (error) {
+      if (error.response?.status === 403) {
+        console.error("권한이 없습니다. 다시 로그인해주세요.");
+        sessionStorage.removeItem("accessToken");
+        window.location.href = "/login";
+        return;
+      }
+      console.error("동기화 실패:", error.response?.data || error.message);
+      throw error;
+    }
   };
 
-  const hasValidPoster = (movie) => {
-    const posterUrl = getPosterUrl(movie.posters);
-    return posterUrl && posterUrl !== PLACEHOLDER_IMAGE;
+  const fetchRecommendedMovies = async () => {
+    try {
+      const params = {
+        size: 5,
+        lastMovieId: lastMovieId || 0, // ✨ null 방지 처리
+      };
+
+      const response = await axios.get("http://localhost:8080/movies/todays", {
+        params,
+        paramsSerializer: { indexes: null }, 
+      });
+
+      if (!response.data || !Array.isArray(response.data)) {
+        throw new Error("유효하지 않은 응답 형식");
+      }
+
+      setRecommendedMovies(response.data);
+
+      if (response.data.length > 0) {
+        setLastMovieId(response.data[response.data.length - 1].movieId);
+      }
+    } catch (error) {
+      console.error("추천 영화 조회 실패:", {
+        error: error.response?.data || error.message,
+        params: { lastMovieId },
+      });
+      throw error;
+    }
   };
 
-  const filterAdultMovies = (movies) => {
-    return movies.filter((movie) => !movie.rating.includes("관람불가"));
-  };
-
-  const getRandomMovies = (movies, count) => {
-    const validMovies = filterAdultMovies(movies).filter((movie) =>
-      hasValidPoster(movie)
-    );
-    const shuffled = [...validMovies].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
-  };
-
-  const getUpcomingMovies = (movies, count) => {
-    const today = new Date();
-    const moviesWithReleaseDate = movies.filter((movie) => movie.repRlsDate);
-    const futureMovies = moviesWithReleaseDate.filter((movie) => {
-      const releaseDate = new Date(
-        movie.repRlsDate.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3")
+  const fetchLatestMovies = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/movies/new-movies",
+        {
+          params: {
+            size: 5,
+            // ✨ 하드코딩 값 → 동적 ID 사용
+            lastMovieId: latestMovies[latestMovies.length - 1]?.movieId || 0,
+          },
+        }
       );
-      return releaseDate > today;
-    });
 
-    const moviesWithPosters = futureMovies.filter((movie) =>
-      hasValidPoster(movie)
-    );
+      // ✅ 응답 데이터 구조 확인
+      if (!response.data?.content) {
+        throw new Error("잘못된 데이터 구조");
+      }
 
-    return moviesWithPosters
-      .sort((a, b) =>
-        new Date(a.repRlsDate.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3")) -
-        new Date(b.repRlsDate.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3"))
-      )
-      .slice(0, count);
+      setLatestMovies((prev) => [...prev, ...response.data.content]);
+    } catch (error) {
+      console.error("최신 영화 조회 실패:", {
+        error: error.response?.data || error.message,
+      });
+      throw error;
+    }
   };
 
-  const handleRefresh = () => {
-    setRandomMovies(getRandomMovies(movies, 5));
+  const getPosterUrl = (posterUrl) => {
+    if (!posterUrl) return null;
+    return posterUrl.startsWith("http") ? posterUrl : `http://${posterUrl}`;
+  };
+
+  const handleRefresh = async () => {
+    try {
+      setLoading(true);
+      await fetchRecommendedMovies();
+    } catch (error) {
+      console.error("영화 새로고침에 실패했습니다:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/auth/login", {
+        username: "your-username",
+        password: "your-password",
+      });
+      const token = response.data.accessToken;
+      sessionStorage.setItem("accessToken", token);
+      console.log("로그인 성공, 토큰 저장 완료");
+    } catch (error) {
+      console.error("로그인 실패:", error);
+    }
   };
 
   if (loading) {
@@ -114,18 +175,17 @@ const Home = () => {
           </button>
         </div>
         <div className="movies-grid">
-          {randomMovies.map((movie) => (
-            <div key={movie.movieSeq} className="movie-card">
-              <Link to={`/movie/${movie.movieSeq}`}>
+          {recommendedMovies.map((movie) => (
+            <div key={movie.movieId} className="movie-card">
+              <Link to={`/movie/${movie.movieId}`}>
                 <img
-                  src={getPosterUrl(movie.posters)}
+                  src={getPosterUrl(movie.posterUrl)}
                   alt={movie.title}
                   className="movie-poster"
                   onError={(e) => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
               </Link>
               <div className="movie-title">{movie.title || "제목 없음"}</div>
             </div>
@@ -136,18 +196,17 @@ const Home = () => {
       <div className="movies-section">
         <h2>최신 영화</h2>
         <div className="movies-grid">
-          {upcomingMovies.map((movie) => (
-            <div key={movie.movieSeq} className="movie-card">
-              <Link to={`/movie/${movie.movieSeq}`}>
+          {latestMovies.map((movie) => (
+            <div key={movie.movieId} className="movie-card">
+              <Link to={`/movie/${movie.movieId}`}>
                 <img
-                  src={getPosterUrl(movie.posters)}
+                  src={getPosterUrl(movie.posterUrl)}
                   alt={movie.title}
                   className="movie-poster"
                   onError={(e) => {
                     e.target.src = LOGO_IMAGE;
                   }}
                 />
-                {/* <h2 className="movie-title">{movie.title || "제목 없음"}</h2> */}
               </Link>
               <div className="movie-title">{movie.title || "제목 없음"}</div>
             </div>
