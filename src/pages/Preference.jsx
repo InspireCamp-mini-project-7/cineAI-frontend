@@ -26,13 +26,9 @@ const Preference = () => {
     const getInitMovies = async () => {
         try {
             setIsLoading(true);
-
-            // 영화 전체 정보 불러오기 
-            await axios.get("http://localhost:8080/movies/upload");
             
             const serverResponse = await axios.get('http://localhost:8080/movies/init?size=8');
             setMovieList(serverResponse.data.data);
-            console.log("response : ", serverResponse.data.data);
         }
         catch (error) {
             console.error("영화 목록 로딩 실패 : ", error);

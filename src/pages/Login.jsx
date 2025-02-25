@@ -6,7 +6,6 @@ import axios from 'axios';
 
 const Login = () => {
     /* 카카오 로그인 접속 */
-    // const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=dd30bf01e82d03f8cdae72dccd634374&redirect_uri=http://localhost:5173/auth/kakao/callback&response_type=code`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=dd30bf01e82d03f8cdae72dccd634374&redirect_uri=${import.meta.env.VITE_KAKAO_CALLBACK_URL}&response_type=code`;
 
     const handleKakaoLogin = () => {

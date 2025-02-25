@@ -28,8 +28,6 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
       const response = await axios.post('http://localhost:8080/api/movies/qa',
         {question: inputMessage}
       );
-      
-      console.log(response.data.data.answer);
 
       // 임시 봇 응답
       setTimeout(() => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import './NewMovie.css'
 import { useNavigate } from 'react-router-dom'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FaSignOutAlt } from 'react-icons/fa' 
@@ -21,7 +21,7 @@ const NewMovie = () => {
     // 업로드할 이미지 파일
     const [posterFile, setPosterFile] = useState(null);
     const fileInputRef = useRef(null);
-        
+
     const navigate = useNavigate();
 
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
@@ -46,8 +46,6 @@ const NewMovie = () => {
 
     // 초기화 버튼 클릭 시
     const handleDeleteButton = async () => {
-        // 파일 삭제 추가 
-
         const result = await Swal.fire({
             title: "입력 내용을 삭제하시겠습니까?",
             text: "삭제 후 복구가 불가능합니다.",
@@ -69,13 +67,15 @@ const NewMovie = () => {
                 genreList: '', 
                 releaseDate: ''
             })
-        }
 
-        Swal.fire({
-            icon: 'success',
-            title: '입력한 영화 정보 삭제 완료 !',
-            text: '입력한 영화 정보가 성공적으로 삭제되었습니다.' 
-        });
+            setPosterFile(null);
+
+            Swal.fire({
+                icon: 'success',
+                title: '입력한 영화 정보 삭제 완료 !',
+                text: '입력한 영화 정보가 성공적으로 삭제되었습니다.' 
+            });
+        }
     }
 
     // 영화 추가 함수
@@ -104,36 +104,36 @@ const NewMovie = () => {
         if (posterFile) {
             formData.append('posterImage', posterFile);
         }
-    
-        console.log("FormData 전송 내용:");
-        for (let pair of formData.entries()) {
-            console.log(`${pair[0]}:`, pair[1]);
-        }
-    
+
         try {
             await axios.post("http://localhost:8080/movies/create", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-    
+
             Swal.fire({
                 icon: 'success',
                 title: '영화 정보 저장 완료!',
                 text: '입력한 영화 정보가 성공적으로 저장되었습니다.'
+            }).then(() => {
+                setMovie({
+                    title: '',
+                    directorName: '',
+                    castList: '',
+                    nation: '',
+                    plot: '',
+                    genreList: '',
+                    releaseDate: ''
+                });
+                setPosterFile(null);
+
+                // 추가 시 관리자 페이지로 이동
+                navigate(-1);
             });
-    
-            setMovie({
-                title: '',
-                directorName: '',
-                castList: '',
-                nation: '',
-                plot: '',
-                genreList: '',
-                releaseDate: ''
-            });
-            setPosterFile(null);
-        } catch (error) {
+            
+        } 
+        catch (error) {
             console.error("영화 정보 저장 실패:", error);
             Swal.fire({
                 icon: 'error',

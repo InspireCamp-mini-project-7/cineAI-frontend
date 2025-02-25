@@ -25,11 +25,8 @@ const Admin = () => {
       try {
         setIsLoading(true);
 
-        // 영화 전체 정보 불러오기 
-        //await axios.get("http://localhost:8080/movies/upload");
-        const serverResponse =  await axios.get("http://localhost:8080/movies/new-movies?&size=30");
+        const serverResponse =  await axios.get("http://localhost:8080/movies/new-movies?&size=5");
         setNewMovieList(serverResponse.data.data.content);
-        console.log("new movie list : ", serverResponse.data.data.content);
       }
       catch (error) {
         console.error("최신 영화 목록 가져오기 실패 : ", error);
@@ -63,7 +60,7 @@ const Admin = () => {
         text: '로그아웃에 성공하여 로그인 페이지로 이동합니다.'
       });
 
-      // sessionStroage에서 토큰 제거
+      // sessionStroage에서 관리자 비밀번호 제거
       sessionStorage.removeItem('password');
 
       // 로그인 페이지로 이동
@@ -110,7 +107,6 @@ const Admin = () => {
                                 className="admin-movie-poster"
                                 onError={e => {
                                   e.target.src = `${imagePath}/cineaiLogo.png`; }} />
-                          {/* <div className="admin-movie-title">{movie.title || "제목 없음"}</div> */}
                             <div className="admin-movie-info">
                             <h3 className="admin-movie-title">{movie.title}</h3>
                             <p className="admin-movie-year">
