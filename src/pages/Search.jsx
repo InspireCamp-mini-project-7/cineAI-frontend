@@ -3,6 +3,7 @@ import { useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import "./Search.css";
 import { BASE_URL, LOGO_IMAGE } from "../constants";
+import Swal from "sweetalert2";
 
 const Search = () => {
   const [movies, setMovies] = useState([]);
@@ -31,11 +32,20 @@ const Search = () => {
 
       const results = response.data?.data?.list || [];
       setMovies(results);
-      console.log("검색된 영화 수:", results.length);
-    } catch (error) {
+
+      if(results.length === 0) {
+        Swal.fire({
+          icon: 'info',
+          title: '검색 결과 없음 !',
+          text: '검색 결과가 존재하지 않습니다.'
+        })
+      }
+    } 
+    catch (error) {
       console.error("영화 정보를 불러오는 데 실패했습니다:", error);
       setError("영화 데이터를 불러오는 중 오류가 발생했습니다.");
-    } finally {
+    } 
+    finally {
       setLoading(false);
     }
   };
@@ -50,29 +60,31 @@ const Search = () => {
       {error && <div className="search-error-message">{error}</div>}
       {!loading && !error && (
         <div className="search-movies-grid">
-          {movies.map((movie) => (
-            <div key={movie.movieId} className="search-movie-card">
-              <Link to={`/movie/${movie.movieId}`}>
-                <img
-                  src={getPosterUrl(movie.posterImageUrl)}
-                  alt={movie.title}
-                  className="search-movie-poster"
-                />
-              </Link>
-              <div className="search-movie-info">
-                <h3 className="search-movie-title">{movie.title}</h3>
-                <p className="search-movie-year">
-                  개봉 연도:{" "}
-                  {movie.releaseDate
-                    ? movie.releaseDate.slice(0, 4)
-                    : "정보 없음"}
-                </p>
-                <p className="search-movie-genre">
-                  장르: {movie.genreList?.join(", ") || "정보 없음"}
-                </p>
+          {
+            movies.map((movie) => (
+              <div key={movie.movieId} className="search-movie-card">
+                <Link to={`/movie/${movie.movieId}`}>
+                  <img
+                    src={getPosterUrl(movie.posterImageUrl)}
+                    alt={movie.title}
+                    className="search-movie-poster"
+                  />
+                </Link>
+                <div className="search-movie-info">
+                  <h3 className="search-movie-title">{movie.title}</h3>
+                  <p className="search-movie-year">
+                    개봉 연도:{" "}
+                    {movie.releaseDate
+                      ? movie.releaseDate.slice(0, 4)
+                      : "정보 없음"}
+                  </p>
+                  <p className="search-movie-genre">
+                    장르: {movie.genreList?.join(", ") || "정보 없음"}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          }
         </div>
       )}
     </div>
