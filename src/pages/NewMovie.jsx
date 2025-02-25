@@ -87,7 +87,7 @@ const NewMovie = () => {
         formData.append('nation', movie.nation);
         formData.append('plot', movie.plot);
         formData.append('releaseDate', movie.releaseDate);
-        
+
         movie.directorName.split(',').map(item => item.trim()).forEach(director => {
             formData.append('directorName', director);
         });
@@ -214,7 +214,7 @@ const NewMovie = () => {
                 </div>
 
                 <div>
-                    <label>감독 : </label>
+                    <label>감독 (쉼표로 구분) : </label>
                     <input
                     type="text"
                     placeholder="감독 이름"
@@ -265,7 +265,7 @@ const NewMovie = () => {
                     <label>개봉년도 : </label>
                     <input
                     type="text"
-                    placeholder="예: 2010"
+                    placeholder="예: 20101225"
                     value={movie.releaseDate}
                     onChange={(e) =>
                         setMovie({ ...movie, releaseDate: e.target.value })
