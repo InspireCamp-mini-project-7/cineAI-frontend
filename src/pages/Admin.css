@@ -98,19 +98,29 @@
     cursor: pointer;
 }
   
-.admin-movie-card:hover {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);       /* 그림자 추가 */
+/* .admin-movie-card:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);      
     transform: translateY(-1px);      
-}
+} */
+
 .admin-movie-poster {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
   
-.admin-movie-title {
-    font-size: 1.2rem;
+.admin-movie-info {
     margin-top: 10px;
-    padding-right: 1rem;
+  }
+  
+  .admin-movie-title {
+    font-size: 18px;
     font-weight: bold;
-}
+  }
+  
+  .admin-movie-director,
+  .admin-movie-year,
+  .admin-movie-genre {
+    font-size: 14px;
+    margin: 5px 0;
+  }

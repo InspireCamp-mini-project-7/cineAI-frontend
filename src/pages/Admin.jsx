@@ -101,17 +101,31 @@ const Admin = () => {
 
                 <div className='admin-movies-section'>
                   <div className="admin-movies-grid">
-                    {newMovieList.map(movie => (
-                      <div key={movie.movieId} className="admin-movie-card">
-                            <img
-                              src={movie.posterImageUrl}
-                              alt={movie.title}
-                              className="admin-movie-poster"
-                              onError={e => {
-                                e.target.src = `${imagePath}/cineaiLogo.png`; }} />
-                        <div className="movie-title">{movie.title || "제목 없음"}</div>
-                      </div>
-                    ))}
+                    {
+                      newMovieList.map(movie => (
+                        <div key={movie.movieId} className="admin-movie-card">
+                              <img
+                                src={movie.posterImageUrl}
+                                alt={movie.title}
+                                className="admin-movie-poster"
+                                onError={e => {
+                                  e.target.src = `${imagePath}/cineaiLogo.png`; }} />
+                          {/* <div className="admin-movie-title">{movie.title || "제목 없음"}</div> */}
+                            <div className="admin-movie-info">
+                            <h3 className="admin-movie-title">{movie.title}</h3>
+                            <p className="admin-movie-year">
+                              개봉 연도:{" "}
+                              {movie.releaseDate
+                                ? movie.releaseDate.slice(0, 4)
+                                : "정보 없음"}
+                            </p>
+                            <p className="admin-movie-genre">
+                              장르: {movie.genreList?.join(", ") || "정보 없음"}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    }
                   </div>
                 </div>
               </>
