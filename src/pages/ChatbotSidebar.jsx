@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ChatbotSidebar.css';
+import axios from 'axios';
 
 const ChatbotSidebar = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
 
   const imagePath = import.meta.env.VITE_IMAGE_PATH;
+
+  const chatContainerRef = useRef(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,23 +24,18 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
     setMessages([...messages, userMessage]);
     setInputMessage('');
 
-    // TODO: 백엔드 API 연동
     try {
-      // POST 요청 예시
-      // const response = await fetch('/api/chat', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify({ message: inputMessage }),
-      // });
-      // const data = await response.json();
+      const response = await axios.post('http://localhost:8080/api/movies/qa',
+        {question: inputMessage}
+      );
       
+      console.log(response.data.data.answer);
+
       // 임시 봇 응답
       setTimeout(() => {
         const botMessage = {
           id: messages.length + 2,
-          text: "죄송합니다. 아직 응답을 연동하지 않았습니다.",
+          text: response.data.data.answer,
           sender: 'bot'
         };
         setMessages(prev => [...prev, botMessage]);
@@ -47,6 +45,12 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
     }
   };
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messages]); // messages가 변경될 때마다 실행
+
   return (
     <div className={`chatbot-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="chatbot-header">
@@ -55,7 +59,7 @@ const ChatbotSidebar = ({ isOpen, onClose }) => {
         <button className="close-button" onClick={onClose}>×</button>
       </div>
       
-      <div className="messages-container">
+      <div className="messages-container" ref={chatContainerRef} style={{ overflowY: "auto", height: "400px" }}>
         {messages.map((message) => (
           <div 
             key={message.id} 
