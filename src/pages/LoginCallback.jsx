@@ -22,8 +22,7 @@ const LoginCallback = () => {
             
             // sessionStorage에 accessToken 저장 => 추후 변경
             sessionStorage.setItem("accessToken", accessToken);
-
-            // 로그인 성공 후
+            
             // 첫 로그인이 아니면 홈 페이지로 이동
             if(serverResponse.data.data.loginStatus === "NOTFIRST")
                 navigate("/home");

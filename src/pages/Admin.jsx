@@ -9,7 +9,7 @@ const Admin = () => {
 
     // 최신 영화 목록 저장
     const [newMovieList, setNewMovieList] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Admin = () => {
     // 최신 영화 목록 불러오는 함수
     const getNewMovies = async () => {
       try {
-        setLoading(true);
+        setIsLoading(true);
 
         // 영화 전체 정보 불러오기 
         await axios.get("http://localhost:8080/movies/upload");
@@ -35,7 +35,7 @@ const Admin = () => {
         console.error("최신 영화 목록 가져오기 실패 : ", error);
       }
       finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     } 
 
@@ -83,7 +83,7 @@ const Admin = () => {
               </div>
           </header>
           {
-            loading && (
+            isLoading && (
               <div className="loading-spinner">
                 <div className="spinner"></div>
                 <p>영화 정보를 불러오는 중...</p>
@@ -92,7 +92,7 @@ const Admin = () => {
           }
 
           {
-            !loading && (
+            !isLoading && (
               <>
                 <div className='admin-title-container'>
                   <h2>최신 영화 정보 관리</h2>
@@ -103,14 +103,12 @@ const Admin = () => {
                   <div className="admin-movies-grid">
                     {newMovieList.map(movie => (
                       <div key={movie.movieId} className="admin-movie-card">
-                          {/* <Link to={`/movie/${movie.movieId}`}> */}
                             <img
                               src={movie.posterImageUrl}
                               alt={movie.title}
                               className="admin-movie-poster"
                               onError={e => {
                                 e.target.src = `${imagePath}/cineaiLogo.png`; }} />
-                            {/* </Link> */}
                         <div className="movie-title">{movie.title || "제목 없음"}</div>
                       </div>
                     ))}

@@ -21,6 +21,9 @@ const Profile = () => {
     const [userInfo, setUserInfo] = useState(null);
     const [likeList, setLikeList] = useState([]);
 
+    // 영화 목록 로딩 상태 변수
+    const [isLoading, setIsLoading] = useState(true);
+
     // 탭 변경 함수
     const handleTabChange = tab => setActiveTab(tab);
 
@@ -29,7 +32,7 @@ const Profile = () => {
 
     // Bearer Token 가져오기
     const token = sessionStorage.getItem("accessToken");
-    
+
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
 
     // activeTab 변경될 때만 useEffect 호출
@@ -98,12 +101,17 @@ const Profile = () => {
     // 찜한 영화 목록 요청 함수
     const getLikeList = async () => {
         try {
+            setIsLoading(true);
+
             // 찜한 영화 요청 시 불러올 영화 수 25개로 한정
             const serverResponse = await axios.get("http://localhost:8080/members/list?size=25");
             setLikeList(serverResponse.data.data.content);
         }
         catch (error) {
             console.error("찜한 영화 목록 로딩 실패 : ", error);
+        }
+        finally {
+            setIsLoading(false);
         }
     }
 
@@ -234,18 +242,32 @@ const Profile = () => {
                     {activeTab === 'preference' && (
                         <div className='profile-preference'>
                             <h2 className='preference-h2'>찜한 영화 목록</h2>
-                            <ul>
-                                {likeList.length > 0 ? (
-                                        likeList.map((movie, index) =>  
-                                            <li key={index}> {movie.title} </li>
-                                        )
-                                    ) 
-                                    : (
-                                        <p>찜한 영화가 존재하지 않습니다.</p>
-                                    )
-                                }
-                            </ul>
-                            <button className='profile-preference-deleteButton' onClick={handleDeleteMovieList}>전체 삭제</button>
+                        {
+                            isLoading && (
+                                <div className="loading-spinner">
+                                    <div className="spinner"></div>
+                                    <p>찜한 영화 목록을 불러오는 중...</p>
+                                </div>
+                            )
+                        }
+                        {
+                            !isLoading && (
+                                <>
+                                    <ul>
+                                        {likeList.length > 0 ? (
+                                                likeList.map((movie, index) =>  
+                                                    <li key={index}> {movie.title} </li>
+                                                )
+                                            ) 
+                                            : (
+                                                <p>찜한 영화가 존재하지 않습니다.</p>
+                                            )
+                                        }
+                                    </ul>
+                                    <button className='profile-preference-deleteButton' onClick={handleDeleteMovieList}>전체 삭제</button>
+                                </>
+                            )
+                        }
                         </div>    
                     )}
                 </section>
