@@ -4,34 +4,42 @@ import axios from "axios";
 import "./Search.css";
 import { BASE_URL, LOGO_IMAGE } from "../constants";
 import Swal from "sweetalert2";
+import { FaSyncAlt } from "react-icons/fa";
 
 const Search = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastPage, setLastPage] = useState(0);
+  
   const location = useLocation();
 
   useEffect(() => {
     const query = new URLSearchParams(location.search).get("query");
     if (query) {
-      fetchMovies(query);
+      fetchMovies(query, 0);
     }
   }, [location.search]);
 
-  const fetchMovies = async (query) => {
+  const fetchMovies = async (query, page) => {
     setLoading(true);
     setError(null);
     try {
       const response = await axios.get(`${BASE_URL}/movies/search`, {
         params: {
           keyword: query,
-          page: 0, // 기본 첫 페이지
+          page: page, 
           limit: 5, // 한 번에 가져올 영화 개수
         },
       });
 
       const results = response.data?.data?.list || [];
-      setMovies(results);
+      
+      if (page === 0) {
+        setMovies(results); // 첫 페이지면 새로운 목록으로 교체
+      } else {
+        setMovies((prevMovies) => [...prevMovies, ...results]); // 페이지 추가 시 기존 목록에 더하기
+      }
 
       if(results.length === 0) {
         Swal.fire({
@@ -39,6 +47,10 @@ const Search = () => {
           title: '검색 결과 없음 !',
           text: '검색 결과가 존재하지 않습니다.'
         })
+      }
+
+      if (response.data.length > 0) {
+        setLastPage(page);
       }
     } 
     catch (error) {
@@ -50,22 +62,41 @@ const Search = () => {
     }
   };
 
-  const getPosterUrl = (posterUrl) => {
-    return posterUrl || LOGO_IMAGE;
+  const handleRefresh = async () => {
+    const query = new URLSearchParams(location.search).get("query");
+    if (!query) return;
+    
+    try {
+      setLoading(true);
+      await fetchMovies(query, lastPage + 1);
+    } 
+    catch (error) {
+      console.error("영화 새로고침에 실패했습니다:", error);
+    } 
+    finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="search-container">
+      <div className="search-section-header">
+        <h1 className="search-title">검색 결과</h1>
+        <button className="search-refresh-button" onClick={handleRefresh}>
+          <FaSyncAlt />
+        </button>
+      </div>
       {loading && <div className="search-loading-spinner">로딩 중...</div>}
       {error && <div className="search-error-message">{error}</div>}
       {!loading && !error && (
+        
         <div className="search-movies-grid">
           {
             movies.map((movie) => (
               <div key={movie.movieId} className="search-movie-card">
                 <Link to={`/movie/${movie.movieId}`}>
                   <img
-                    src={getPosterUrl(movie.posterImageUrl)}
+                    src={movie.posterImageUrl}
                     alt={movie.title}
                     className="search-movie-poster"
                   />
