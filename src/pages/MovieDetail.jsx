@@ -26,7 +26,7 @@ const MovieDetail = () => {
   const getLikeList = async () => {
     try {
       // 찜한 영화 요청 시 불러올 영화 수 50개로 한정
-      const serverResponse = await axios.get("http://localhost:8080/members/list?size=50");
+      const serverResponse = await axios.get("/members/list?size=50");
       setLikeList(serverResponse.data.data.content);
     }
     catch (error) {
@@ -39,7 +39,7 @@ const MovieDetail = () => {
       try {
         setLoading(true);
 
-        const response = await axios.get(`${BASE_URL}/movies/${id}`);
+        const response = await axios.get(`/movies/${id}`);
 
         if (response.data.success) {
           const movieData = response.data.data;

@@ -56,7 +56,7 @@ const Preference = () => {
             // 여러 영화 ID를 각각 PATCH 호출
             await Promise.all(
                 selectedMovieIds.map(movieId => {
-                    axios.patch(`http://localhost:8080/movies/liked?movieId=${movieId}`)
+                    axios.patch(`/movies/liked?movieId=${movieId}`)
                 })
             );
 
