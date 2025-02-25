@@ -27,7 +27,7 @@ const NewMovie = () => {
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
     
     // 뒤로 가기 버튼 클릭 시, 관리자 최신 영화 목록 페이지로 이동
-    const handleBackButton = () => {
+    const handleBackButtonClick = () => {
         navigate('/admin');
     }   
 
@@ -87,12 +87,19 @@ const NewMovie = () => {
         formData.append('nation', movie.nation);
         formData.append('plot', movie.plot);
         formData.append('releaseDate', movie.releaseDate);
+        
+        movie.directorName.split(',').map(item => item.trim()).forEach(director => {
+            formData.append('directorName', director);
+        });
     
-        // JSON으로 변환하여 추가
-        formData.append('directorName', JSON.stringify(movie.directorName.split(',').map(item => item.trim())));
-        formData.append('castList', JSON.stringify(movie.castList.split(',').map(item => item.trim())));
-        formData.append('genreList', JSON.stringify(movie.genreList.split(',').map(item => item.trim())));
+        movie.castList.split(',').map(item => item.trim()).forEach(cast => {
+            formData.append('castList', cast);
+        });
     
+        movie.genreList.split(',').map(item => item.trim()).forEach(genre => {
+            formData.append('genreList', genre);
+        });
+
         // 파일 추가
         if (posterFile) {
             formData.append('posterImage', posterFile);
@@ -167,7 +174,7 @@ const NewMovie = () => {
      return (
         <section className='newmovie-container'>
             <header className='newmovie-header'>
-                <img className='newmovie-backButton' src={`${imagePath}/backIcon.png`} onClick={handleBackButton} />
+                <img className='newmovie-backButton' src={`${imagePath}/backIcon.png`} onClick={handleBackButtonClick} />
                 <div className='newmovie-headerText'>관리자 페이지</div>
                 <div className="admin-logout-container">
                   <button className="admin-logout-btn" onClick={handleLogout}>
