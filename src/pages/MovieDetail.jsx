@@ -20,6 +20,21 @@ const MovieDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 사용자 좋아요 리스트
+  const [likeList, setLikeList] = useState([]);
+
+  // 찜한 영화 목록 요청 함수
+  const getLikeList = async () => {
+    try {
+      // 찜한 영화 요청 시 불러올 영화 수 50개로 한정
+      const serverResponse = await axios.get("http://localhost:8080/members/list?size=50");
+      setLikeList(serverResponse.data.data.content);
+    }
+    catch (error) {
+        console.error("찜한 영화 목록 로딩 실패 : ", error);
+    }
+  }
+
   const getPosterUrl = (posters) => {
     if (!posters) return null;
     const firstPoster = posters.split("|")[0];
@@ -45,7 +60,7 @@ const MovieDetail = () => {
             posters: movieData.posterImageUrl || LOGO_IMAGE,
             genre: movieData.genreList?.join(", ") || "장르 정보 없음",
             plot: movieData.plot || "줄거리 정보 없음",
-            directors: movieData.directorName || "감독 정보 없음",
+            directors: movieData.directorName?.join(", ") || "감독 정보 없음",
             actors: movieData.castsList?.join(", ") || "출연 정보 없음",
             nation: movieData.nation || "국가 정보 없음",
             releaseDate: movieData.releaseDate || "개봉일 정보 없음",
@@ -70,6 +85,19 @@ const MovieDetail = () => {
 
     fetchMovieDetails();
   }, [id]);
+
+  useEffect(() => {
+      // 사용자가 찜한 영화 목록 가져옴
+      getLikeList();
+  }, [])
+  
+  // likeList에서 현재 영화가 존재하는지 확인하여 isLiked 업데이트
+  useEffect(() => {
+    console.log(likeList);
+    if (likeList.length > 0) {
+      setIsLiked(likeList.some(movie => movie.movieId === parseInt(id)));
+    }
+  }, [likeList, id]); // likeList가 변경될 때 실행
 
   const handleDownload = async () => {
     try {
@@ -165,14 +193,16 @@ const MovieDetail = () => {
 
             <div className="movie-info">
               <p>
-                <strong>장르:</strong> {movie.genre}
+                <strong>장르:</strong> {" "}
+                {movie.genre.split(", ").slice(0, 8).join(", ")}
               </p>
               <p>
-                <strong>감독:</strong> {movie.directors}
+                <strong>감독:</strong> {" "}
+                {movie.directors.split(", ").slice(0, 10).join(", ")}
               </p>
               <p>
                 <strong>출연:</strong>{" "}
-                {movie.actors.split(", ").slice(0, 5).join(", ")}
+                {movie.actors.split(", ").slice(0, 13).join(", ")}
               </p>
             </div>
 
