@@ -224,13 +224,17 @@ const Profile = () => {
                                     <img className='profile-editIcon' src={`${imagePath}/editIcon.png`}
                                          onClick={() => handleNicknameClick(!clickNickname)}/><br />
                                         {clickNickname ? (
-                                            <>
+                                            <div className="nickname-edit-area">
                                                 <div><strong>닉네임 변경</strong></div>
-                                                <input className='profile-editNickname' type='text' value={nickname} onChange={e => setNickname(e.target.value)}/>
-                                                <button className='profile-editButton' onClick={updateNickname}>수정</button><br /> 
-                                            </>    
-                                            ) : (<></>)
-                                        }
+                                                <input 
+                                                    className='profile-editNickname' 
+                                                    type='text' 
+                                                    value={nickname} 
+                                                    onChange={e => setNickname(e.target.value)}
+                                                />
+                                                <button className='profile-editButton' onClick={updateNickname}>수정</button>
+                                            </div>    
+                                        ) : null}
                                     <div><strong>이메일</strong></div> 
                                     <div>{userInfo.email}</div>
                                     <button className='profile-deleteButton' onClick={deleteUser}>회원 탈퇴</button>
