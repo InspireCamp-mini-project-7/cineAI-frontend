@@ -107,25 +107,38 @@
     margin-right: 1rem;
 }
 
+/* 닉네임과 아이콘을 함께 묶는 컨테이너 추가 */
+.nickname-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 닉네임과 아이콘 사이 간격 */
+}
+
+/* 수정 아이콘 스타일 수정 */
 .profile-editIcon {
     width: 1.3rem;
     height: 1.3rem;
-    margin-left: 1rem;
+    margin-left: 0.3rem; /* 간격 축소 */
     cursor: pointer;
+    vertical-align: middle; /* 텍스트와 수직 정렬 */
 }
 
 .profile-editNickname {
     height: 2rem;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: 0 0.5rem;  /* 상하 패딩 제거, 좌우 패딩만 유지 */
+    border-radius: 0.4rem;  /* 버튼과 동일한 라운드 적용 */
     width: 100%;
     max-width: 300px;
+    box-sizing: border-box;  /* 패딩을 높이에 포함 */
+    line-height: 2rem;  /* 텍스트 세로 중앙 정렬 */
+    border: 1px solid #ccc;  /* 경계선 추가 */
+    font-size: 0.9rem;  /* 폰트 사이즈 조정 */
 }
 
 /* 수정 버튼 영역 */
 .nickname-edit-area {
     display: flex;
-    align-items: center;
+    align-items: center;  /* 요소들 세로 중앙 정렬 */
     flex-wrap: wrap;
     gap: 1rem;
     margin-bottom: 1rem;
@@ -141,6 +154,8 @@
     color: white;
     cursor: pointer;
     padding: 0 1rem;
+    box-sizing: border-box;  /* 일관성을 위해 추가 */
+    font-size: 0.9rem;  /* 폰트 사이즈 조정 */
 }
 
 .profile-deleteButton {
