@@ -17,7 +17,20 @@ const Search = () => {
   useEffect(() => {
     const query = new URLSearchParams(location.search).get("query");
     if (query) {
-      fetchMovies(query, 0);
+      // 세션 스토리지에서 이 검색어에 대한 캐시 확인
+      const cachedData = sessionStorage.getItem(`search_${query}`);
+      const cachedLastPage = sessionStorage.getItem(`search_lastPage_${query}`);
+      
+      if (cachedData && cachedLastPage) {
+        // 캐시된 데이터가 있으면 사용
+        setMovies(JSON.parse(cachedData));
+        setLastPage(parseInt(cachedLastPage));
+        setLoading(false);
+        setError(null);
+      } else {
+        // 캐시된 데이터가 없으면 API 호출
+        fetchMovies(query, 0);
+      }
     }
   }, [location.search]);
 
@@ -48,17 +61,27 @@ const Search = () => {
           text: '검색 결과가 존재하지 않습니다.'
         })
 
-        // 검색 결과가 없을 경우, lastPage 0으로 초기화
         setLastPage(0);
+        // 빈 결과도 캐싱 (불필요한 API 호출 방지)
+        sessionStorage.setItem(`search_${query}`, JSON.stringify([]));
+        sessionStorage.setItem(`search_lastPage_${query}`, '0');
         return;
       }
 
+      let updatedMovies = [];
+      
       if (page === 0) {
-        setMovies(results); // 첫 페이지면 새로운 목록으로 교체
+        updatedMovies = results;
+        setMovies(results);
       } else {
-        setMovies((prevMovies) => [...prevMovies, ...results]); // 페이지 추가 시 기존 목록에 더하기
+        updatedMovies = [...movies, ...results];
+        setMovies(updatedMovies);
       }
 
+      // 검색 결과 캐싱
+      sessionStorage.setItem(`search_${query}`, JSON.stringify(updatedMovies));
+      sessionStorage.setItem(`search_lastPage_${query}`, page.toString());
+      
       setLastPage(page);
     } 
     catch (error) {
