@@ -1,35 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+import Admin from "./pages/Admin";
+import MovieDetail from "./pages/MovieDetail";
+import Profile from "./pages/Profile";
+import Search from "./pages/Search";
+import LoginCallback from "./pages/LoginCallback";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import Header from "./components/Header"; // 헤더 추가
+import Preference from './pages/Preference';
+import axios from 'axios';
+import NewMovie from './pages/NewMovie';
+import PrivateRoute from './components/PrivateRoute';
+import AdminPrivateRoute from './components/AdminPrivateRouter';
 
-function App() {
-  const [count, setCount] = useState(0)
+// 모든 axios 요청에 대해 withCredentials: true를 전역적으로 설정
+axios.defaults.baseURL = 'http://localhost:8080';
+axios.defaults.withCredentials = true;
 
+/* 헤더 숨길 경로 목록 */
+const hiddenHeaderPaths = ["/", "/login", "/auth/kakao/callback", "/profile", "/admin", "/preference", "/admin/newMovie"];
+
+/* 라우터 설정 추가 */
+function Layout() {
+  const location = useLocation();
+  const shouldHideHeader = hiddenHeaderPaths.includes(location.pathname);
+  
   return (
     <>
+      { !shouldHideHeader && <Header /> } {/* 특정 경로에서 헤더 숨김 */}
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Routes>
+          <Route path= "/"  element={<Login/>} />
+          <Route path= "/login"  element={<Login/>} />
+          <Route path= "/auth/kakao/callback"  element={<LoginCallback/>} />
+          <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+          <Route path="/movie/:id" element={<PrivateRoute><MovieDetail /></PrivateRoute>} />
+          <Route path="/admin" element={<AdminPrivateRoute><Admin /></AdminPrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="/search" element={<PrivateRoute><Search /></PrivateRoute>} />
+          <Route path="/preference" element={<PrivateRoute><Preference /></PrivateRoute>} />
+          <Route path='/admin/newMovie' element={<AdminPrivateRoute><NewMovie /></AdminPrivateRoute>} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <Layout /> {/* Layout 컴포넌트가 Router 내부에서 실행됨 */}
+    </Router>
+  );
 }
 
-export default App
+export default App;

@@ -1,0 +1,245 @@
+/* 헤더 기본 스타일 */
+.header {
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    min-height: 60px;
+    flex-wrap: nowrap;
+}
+
+/* 헤더를 세 섹션으로 분할: 왼쪽, 중앙, 오른쪽 */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 0 0 auto;
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 0; /* flexbox 내부에서 축소할 수 있도록 */
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 0 0 auto;
+}
+
+.header-backButton {
+    width: 1.5rem;
+    height: 1.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+/* 챗봇 버튼 스타일 */
+.chatbot-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #47ADEB;
+    z-index: 1001; 
+    padding: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.chatbot-btn:hover {
+    transform: scale(1.1); /* 마우스를 올리면 살짝 커짐 */
+}
+
+.chat-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+}
+
+/* 로고 + 검색창 스타일 */
+.center-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 600px;
+    flex-wrap: nowrap;
+    overflow: hidden; /* 넘침 방지 */
+}
+
+.logo-image {
+    height: 40px; /* 로고 이미지 높이 설정 */
+    width: auto; /* 가로 비율 자동 조정 */
+    flex-shrink: 0;
+}
+
+/* 검색창 스타일 */
+.search-bar {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 6px 10px; 
+    flex: 1;
+    min-width: 0; /* flexbox 내부에서 축소할 수 있도록 */
+}
+
+.search-bar input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    background: transparent;
+    min-width: 0; /* 필요시 축소 가능 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 검색 버튼 hover 시 커서 번경 */
+.search-icon {
+    cursor: pointer;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0; /* 크기 고정 */
+}
+
+/* 오른쪽 프로필 아이콘 스타일 */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 아이콘 간격 증가 */
+}
+
+/* 프로필 컨테이너 수정 */
+.profile-container {
+    position: relative;
+    margin-left: auto; /* 오른쪽 끝 고정 */
+}
+
+/* 프로필 버튼 패딩 추가 */
+.profile-btn {
+    width: 2.2rem;  /* 버튼 크기 */
+    height: 2.2rem;
+    border-radius: 50%; /* 원형 버튼 */
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0; /* 크기 고정 */
+}
+
+.profile-icon {
+    font-size: 2rem; /* 아이콘 크기 */
+    color: #47ADEB; 
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-container {
+    display: flex;
+    align-items: center;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 0;
+    padding: 0.3rem;
+    white-space: nowrap;
+}
+
+/* 반응형 디자인을 위한 미디어 쿼리 */
+@media (max-width: 768px) {
+    .header {
+        padding: 0.4rem;
+    }
+    
+    .logo-image {
+        height: 36px;
+    }
+    
+    .logout-btn span {
+        display: none; /* 텍스트 숨김 */
+    }
+}
+
+@media (max-width: 580px) {
+    .header {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.3rem;
+    }
+    
+    .header-center {
+        order: 3;
+        width: 100%;
+        flex-basis: 100%;
+    }
+    
+    .center-content {
+        width: 100%;
+    }
+    
+    .logo-image {
+        height: 32px;
+    }
+    
+    .profile-icon {
+        font-size: 1.8rem;
+    }
+    
+    .chat-icon {
+        width: 1.6rem;
+        height: 1.6rem;
+    }
+    
+    .header-backButton {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .profile-btn {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .profile-icon {
+        font-size: 1.6rem;
+    }
+    
+    .chat-icon {
+        width: 1.4rem;
+        height: 1.4rem;
+    }
+    
+    .header-backButton {
+        width: 1.2rem;
+        height: 1.2rem;
+    }
+    
+    .search-bar {
+        padding: 4px 8px;
+    }
+}

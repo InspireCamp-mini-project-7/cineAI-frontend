@@ -1,0 +1,91 @@
+.search-container {
+  padding: 20px;
+}
+
+.search-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0rem 3rem 0rem;
+}
+
+.search-title {
+  color: #49454F;
+  font-size: 26px;
+}
+
+.search-loading-spinner {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 50px;
+}
+
+.search-error-message {
+  color: red;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 50px;
+}
+
+.search-movies-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.search-movie-card {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-movie-poster {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.search-movie-info {
+  margin-top: 10px;
+}
+
+.search-movie-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.search-movie-director,
+.search-movie-year,
+.search-movie-genre {
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.search-add-button {
+  margin-top: 1.5rem;
+  padding: 5px 10px;
+  font-size: 3rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #0086cd;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.search-refresh-button:hover {
+  color: #0066a2;
+}
