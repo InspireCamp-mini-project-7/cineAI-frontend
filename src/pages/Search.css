@@ -15,20 +15,6 @@
   font-size: 26px;
 }
 
-.search-refresh-button {
-  margin-left: 10px;
-  padding: 5px 10px;
-  font-size: 14px;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #0086cd;
-}
-
-.search-refresh-button:hover {
-  color: #0066a2;
-}
-
 .search-loading-spinner {
   text-align: center;
   font-size: 1.5rem;
@@ -40,6 +26,12 @@
   text-align: center;
   font-size: 1.2rem;
   margin-top: 50px;
+}
+
+.search-movies-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .search-movies-grid {
@@ -81,6 +73,19 @@
   margin: 5px 0;
 }
 
-.highlight {
-  background-color: yellow;
+.search-add-button {
+  margin-top: 1.5rem;
+  padding: 5px 10px;
+  font-size: 3rem;
+  cursor: pointer;
+  background: none;
+  border: none;
+  color: #0086cd;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.search-refresh-button:hover {
+  color: #0066a2;
 }
