@@ -82,34 +82,39 @@ const Header = () => {
   return (
     <>
       <header className="header">
-        <img className='header-backButton' src={`${imagePath}/blackBackIcon.png`} onClick={handleBackButtonClick} />
-
-        {/* 왼쪽: 챗봇 버튼 */}
-        <button className="chatbot-btn" onClick={toggleChatbot}>
-          <FaComments className="chat-icon" />
-        </button>
-
-        {/* 중앙: 로고 + 검색창 + 프로필 아이콘 */}
-        <div className="center-content">
-          <Link to="/home" className="logo">
-            <img src={`${imagePath}/cineaiLogo.png`} alt="CineAI Logo" className="logo-image" />
-          </Link>
-          <form className="search-bar" onSubmit={handleSearchSubmit}>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="배우, 영화 제목, 감독을 입력하세요"
-            />
-            <FaSearch className="search-icon" />
-          </form>
-          <button className="profile-btn" onClick={handleProfileClick}>
-            <FaUserCircle className="profile-icon" />
+        <div className="header-left">
+          <img 
+            className='header-backButton' 
+            src={`${imagePath}/blackBackIcon.png`} 
+            alt="뒤로 가기"
+            onClick={handleBackButtonClick} 
+          />
+          <button className="chatbot-btn" onClick={toggleChatbot}>
+            <FaComments className="chat-icon" />
           </button>
         </div>
 
-        {/* 오른쪽: 로그아웃 버튼 */}
-        <div className="logout-container">
+        <div className="header-center">
+          <div className="center-content">
+            <Link to="/home" className="logo">
+              <img src={`${imagePath}/cineaiLogo.png`} alt="CineAI Logo" className="logo-image" />
+            </Link>
+            <form className="search-bar" onSubmit={handleSearchSubmit}>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="배우, 영화 제목, 감독을 입력하세요"
+              />
+              <FaSearch className="search-icon" onClick={handleSearchSubmit} />
+            </form>
+          </div>
+        </div>
+
+        <div className="header-right">
+          <button className="profile-btn" onClick={handleProfileClick}>
+            <FaUserCircle className="profile-icon" />
+          </button>
           <button className="logout-btn" onClick={handleLogout}>
             <FaSignOutAlt />
             <span>로그아웃</span>
@@ -117,11 +122,7 @@ const Header = () => {
         </div>
       </header>
 
-      {/* Header에서만 사이드바 렌더링 */}
-      <ChatbotSidebar
-        isOpen={isChatbotOpen}
-        onClose={() => setIsChatbotOpen(false)}
-      />
+      {isChatbotOpen && <ChatbotSidebar isOpen={isChatbotOpen} onClose={() => setIsChatbotOpen(false)} />}
     </>
   );
 };
