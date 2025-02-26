@@ -32,13 +32,14 @@ const Header = () => {
 
   // 프로필 아이콘 클릭 시 회원 정보 페이지로 이동
   const handleProfileClick = () => {
-    navigate('/profile');
-  }
+    navigate("/profile");
+  };
 
-  // 뒤로 가기 버튼 클릭 시, 이전 페이지로 이동
-  const handleBackButtonClick = () => {
+  // 뒤로 가기 버튼 클릭 시, 이전 페이지로 이동 (새로고침 방지)
+  const handleBackButtonClick = (e) => {
+    e.preventDefault();
     navigate(-1);
-  }  
+  };
 
   // 로그아웃 처리 함수
   const handleLogout = async () => {
@@ -49,45 +50,43 @@ const Header = () => {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "로그아웃",
-      cancelButtonText: "취소"
+      cancelButtonText: "취소",
     });
 
-    if(result.isConfirmed) {
+    if (result.isConfirmed) {
       try {
         axios.post("/members/logout", {
           headers: {
-             Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         Swal.fire({
-          icon: 'success',
-          title: '로그아웃 완료 !',
-          text: '로그아웃에 성공하여 로그인 페이지로 이동합니다.'
+          icon: "success",
+          title: "로그아웃 완료 !",
+          text: "로그아웃에 성공하여 로그인 페이지로 이동합니다.",
         });
 
         // sessionStroage에서 토큰 제거
-        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem("accessToken");
 
         // 로그인 페이지로 이동
-        navigate('/');
-      }
-
-      catch (error) {
+        navigate("/");
+      } catch (error) {
         console.error("로그아웃 실패 : ", error);
       }
     }
-  }
-  
+  };
+
   return (
     <>
       <header className="header">
         <div className="header-left">
-          <img 
-            className='header-backButton' 
-            src={`${imagePath}/blackBackIcon.png`} 
+          <img
+            className="header-backButton"
+            src={`${imagePath}/blackBackIcon.png`}
             alt="뒤로 가기"
-            onClick={handleBackButtonClick} 
+            onClick={handleBackButtonClick}
           />
           <button className="chatbot-btn" onClick={toggleChatbot}>
             <FaComments className="chat-icon" />
@@ -97,7 +96,11 @@ const Header = () => {
         <div className="header-center">
           <div className="center-content">
             <Link to="/home" className="logo">
-              <img src={`${imagePath}/cineaiLogo.png`} alt="CineAI Logo" className="logo-image" />
+              <img
+                src={`${imagePath}/cineaiLogo.png`}
+                alt="CineAI Logo"
+                className="logo-image"
+              />
             </Link>
             <form className="search-bar" onSubmit={handleSearchSubmit}>
               <input
@@ -122,7 +125,12 @@ const Header = () => {
         </div>
       </header>
 
-      {isChatbotOpen && <ChatbotSidebar isOpen={isChatbotOpen} onClose={() => setIsChatbotOpen(false)} />}
+      {isChatbotOpen && (
+        <ChatbotSidebar
+          isOpen={isChatbotOpen}
+          onClose={() => setIsChatbotOpen(false)}
+        />
+      )}
     </>
   );
 };

@@ -19,7 +19,20 @@ const Home = () => {
       window.location.href = "/login";
       return;
     }
-    initializeMovieData();
+    
+    // 세션 스토리지에서 저장된 데이터 확인
+    const cachedRecommended = sessionStorage.getItem('recommendedMovies');
+    const cachedLatest = sessionStorage.getItem('latestMovies');
+    
+    if (cachedRecommended && cachedLatest) {
+      // 캐시된 데이터가 있으면 사용
+      setRecommendedMovies(JSON.parse(cachedRecommended));
+      setLatestMovies(JSON.parse(cachedLatest));
+      setLoading(false);
+    } else {
+      // 없으면 새로 로드
+      initializeMovieData();
+    }
   }, []);
 
   const initializeMovieData = async () => {
@@ -62,6 +75,7 @@ const Home = () => {
       // }
 
       setRecommendedMovies(response.data.data.content);
+      sessionStorage.setItem('recommendedMovies', JSON.stringify(response.data.data.content));
 
       if (response.data.length > 0) {
         setLastMovieId(response.data[response.data.length - 1].movieId);
@@ -96,6 +110,7 @@ const Home = () => {
 
       // setLatestMovies((prev) => [...prev, ...response.data.content]);
       setLatestMovies(response.data.data.content);
+      sessionStorage.setItem('latestMovies', JSON.stringify(response.data.data.content));
     } catch (error) {
       console.error("최신 영화 조회 실패:", {
         error: error.response?.data || error.message,
