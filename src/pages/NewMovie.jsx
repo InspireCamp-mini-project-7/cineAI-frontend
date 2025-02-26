@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { FaSignOutAlt } from 'react-icons/fa' 
+import AdminHeader from '../components/AdminHeader'
 
 const NewMovie = () => {
     // 영화 정보를 요청 데이터 구조에 맞게 상태로 관리
@@ -173,16 +174,7 @@ const NewMovie = () => {
 
      return (
         <section className='newmovie-container'>
-            <header className='newmovie-header'>
-                <img className='newmovie-backButton' src={`${imagePath}/backIcon.png`} onClick={handleBackButtonClick} />
-                <div className='newmovie-headerText'>관리자 페이지</div>
-                <div className="admin-logout-container">
-                  <button className="admin-logout-btn" onClick={handleLogout}>
-                      <FaSignOutAlt />
-                      <span>로그아웃</span>
-                  </button>
-                </div>
-            </header>
+            <AdminHeader title="관리자 페이지" />
             <h2>최신 영화 추가</h2>
             <div className="newmovie-movie-info">
                 <div>

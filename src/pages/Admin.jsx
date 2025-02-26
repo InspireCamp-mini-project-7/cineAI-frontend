@@ -2,19 +2,16 @@ import React, { useEffect, useState } from 'react'
 import './Admin.css'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FaSignOutAlt } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import AdminHeader from '../components/AdminHeader'
 
 const Admin = () => {
-
     // 최신 영화 목록 저장
     const [newMovieList, setNewMovieList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
-
     const imagePath = import.meta.env.VITE_IMAGE_PATH;
-
 
     useEffect(() => {
       getNewMovies();
@@ -24,8 +21,7 @@ const Admin = () => {
     const getNewMovies = async () => {
       try {
         setIsLoading(true);
-
-        const serverResponse =  await axios.get("/movies/new-movies?&size=5");
+        const serverResponse = await axios.get("/movies/new-movies?&size=5");
         setNewMovieList(serverResponse.data.data.content);
       }
       catch (error) {
@@ -41,44 +37,9 @@ const Admin = () => {
       navigate('/admin/newMovie');
     }
 
-  // 로그아웃 처리 함수
-  const handleLogout = async () => {
-    const result = await Swal.fire({
-      title: "로그아웃 하시겠습니까?",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "로그아웃",
-      cancelButtonText: "취소"
-    });
-
-    if(result.isConfirmed) {
-      Swal.fire({
-        icon: 'success',
-        title: '로그아웃 완료 !',
-        text: '로그아웃에 성공하여 로그인 페이지로 이동합니다.'
-      });
-
-      // sessionStroage에서 관리자 비밀번호 제거
-      sessionStorage.removeItem('password');
-
-      // 로그인 페이지로 이동
-      navigate('/');
-    }
-  }
-
     return (
       <section className='admin-container'>
-          <header className='admin-header'>
-              <div className='admin-headerText'>관리자 페이지</div>
-              <div className="admin-logout-container">
-                  <button className="admin-logout-btn" onClick={handleLogout}>
-                      <FaSignOutAlt />
-                      <span>로그아웃</span>
-                  </button>
-              </div>
-          </header>
+          <AdminHeader title="관리자 페이지" showBackButton={false} />
           {
             isLoading && (
               <div className="loading-spinner">
