@@ -219,18 +219,30 @@ const Profile = () => {
                             <h2 className='account-h2'>계정 정보</h2>
                             {userInfo && (
                                 <div className='profile-account'>
-                                    <div><strong>닉네임</strong></div>
-                                    <div>{userInfo.nickName}</div>
-                                    <img className='profile-editIcon' src={`${imagePath}/editIcon.png`}
-                                         onClick={() => handleNicknameClick(!clickNickname)}/><br />
-                                        {clickNickname ? (
-                                            <>
-                                                <div><strong>닉네임 변경</strong></div>
-                                                <input className='profile-editNickname' type='text' value={nickname} onChange={e => setNickname(e.target.value)}/>
-                                                <button className='profile-editButton' onClick={updateNickname}>수정</button><br /> 
-                                            </>    
-                                            ) : (<></>)
-                                        }
+                                    <div>
+                                        <strong>닉네임</strong>
+                                        <div className="nickname-container">
+                                            {userInfo.nickName}
+                                            <img 
+                                                src={`${imagePath}/editIcon.png`} 
+                                                className="profile-editIcon" 
+                                                alt="수정" 
+                                                onClick={() => setclickNickname(true)}
+                                            />
+                                        </div>
+                                    </div>
+                                    {clickNickname ? (
+                                        <div className="nickname-edit-area">
+                                            <div><strong>닉네임 변경</strong></div>
+                                            <input 
+                                                className='profile-editNickname' 
+                                                type='text' 
+                                                value={nickname} 
+                                                onChange={e => setNickname(e.target.value)}
+                                            />
+                                            <button className='profile-editButton' onClick={updateNickname}>수정</button>
+                                        </div>    
+                                    ) : null}
                                     <div><strong>이메일</strong></div> 
                                     <div>{userInfo.email}</div>
                                     <button className='profile-deleteButton' onClick={deleteUser}>회원 탈퇴</button>

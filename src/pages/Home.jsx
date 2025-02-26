@@ -130,19 +130,16 @@ const Home = () => {
     }
   };
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await axios.post("http://localhost:8080/auth/login", {
-  //       username: "your-username",
-  //       password: "your-password",
-  //     });
-  //     const token = response.data.accessToken;
-  //     sessionStorage.setItem("accessToken", token);
-  //     console.log("로그인 성공, 토큰 저장 완료");
-  //   } catch (error) {
-  //     console.error("로그인 실패:", error);
-  //   }
-  // };
+  const handleLatestRefresh = async () => {
+    try {
+      setLoading(true);
+      await fetchLatestMovies();
+    } catch (error) {
+      console.error("최신 영화 새로고침에 실패했습니다:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -156,7 +153,6 @@ const Home = () => {
   return (
     <div className="main-container">
       <h1 className="main-title">영화 추천 목록</h1>
-
       <div className="movies-section">
         <div className="section-header">
           <h2>맞춤 영화 추천</h2>
@@ -177,7 +173,6 @@ const Home = () => {
                   }}
                 />
               </Link>
-
               <div className="movie-info">
                 <h3 className="movie-title">{movie.title}</h3>
                 <p className="movie-year">
@@ -194,9 +189,13 @@ const Home = () => {
           ))}
         </div>
       </div>
-
       <div className="movies-section">
-        <h2>최신 영화</h2>
+        <div className="section-header">
+          <h2>최신 영화</h2>
+          <button className="refresh-button" onClick={handleLatestRefresh}>
+            <FaSyncAlt />
+          </button>
+        </div>
         <div className="movies-grid">
           {latestMovies.map((movie) => (
             <div key={movie.movieId} className="movie-card">
@@ -210,7 +209,6 @@ const Home = () => {
                   }}
                 />
               </Link>
-
               <div className="movie-info">
                 <h3 className="movie-title">{movie.title}</h3>
                 <p className="movie-year">

@@ -6,8 +6,8 @@ WORKDIR /app
 
 # 의존성 설치 및 빌드(CI)
 COPY package.json package-lock.json ./
-COPY . .
 RUN npm install 
+COPY . .
 RUN npm run build
 
 # Nginx를 기반으로 하는 최종 이미지

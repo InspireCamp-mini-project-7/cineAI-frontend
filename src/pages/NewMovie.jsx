@@ -254,7 +254,7 @@ const NewMovie = () => {
                 </div>
 
                 <div>
-                    <label>개봉년도 : </label>
+                    <label>개봉일 : </label>
                     <input
                     type="text"
                     placeholder="예: 20101225"
