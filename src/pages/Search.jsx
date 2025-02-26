@@ -35,10 +35,13 @@ const Search = () => {
   }, [location.search]);
 
   useEffect(() => {
-    if(scrollRef.current) {
-      scrollRef.current.scrollIntoView({behavior: "smooth"});
-    }
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100); // 100ms 딜레이 추가
   }, [movies]);
+  
 
   const fetchMovies = async (query, page) => {
     setLoading(true);
