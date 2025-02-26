@@ -80,7 +80,23 @@ const Header = () => {
 
   return (
     <>
-      <header className="header">
+      <header 
+        className="header-container"
+        style={{
+          width: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          alignItems: "center",
+          padding: "0.5rem",
+          background: "#fff",
+          boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+          position: "sticky",
+          top: 0,
+          left: 0,
+          zIndex: 1000,
+          minHeight: "60px",
+          flexWrap: "nowrap",
+        }}>
         <div className="header-left">
           <img
             className="header-backButton"
